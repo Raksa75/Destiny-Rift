@@ -1,27 +1,47 @@
-import { CareerSummary } from './components/CareerSummary';
-import { CharacterCreation } from './components/CharacterCreation';
-import { Dashboard } from './components/Dashboard';
-import { SeasonBanner } from './components/SeasonBanner';
-import { useGame } from './game/useGame';
+import { useState } from 'react';
+import { I18nProvider } from './i18n';
+import { LanguageSwitcher } from './components/LanguageSwitcher';
+import { MainMenu } from './components/MainMenu';
+import { MyPlayers } from './components/MyPlayers';
+import { Shop } from './components/Shop';
+import { CreationWizard } from './components/creation/CreationWizard';
+import { loadCareers, saveCareer } from './lib/storage';
+import type { CareerRecord } from './types';
 
-function App() {
-  const { state, start, act, dismissBanner, restart } = useGame();
+type Screen = 'menu' | 'players' | 'shop' | 'create';
 
-  if (!state) {
-    return <CharacterCreation onStart={start} />;
-  }
-
-  if (state.retired) {
-    return <CareerSummary state={state} onRestart={restart} />;
-  }
+function AppContent() {
+  const [screen, setScreen] = useState<Screen>('menu');
+  const [careers, setCareers] = useState<CareerRecord[]>(() => loadCareers());
 
   return (
     <>
-      <Dashboard state={state} onAct={act} />
-      {state.seasonBanner && (
-        <SeasonBanner result={state.seasonBanner} onClose={dismissBanner} />
+      <LanguageSwitcher />
+
+      {screen === 'menu' && <MainMenu onNavigate={setScreen} />}
+
+      {screen === 'players' && (
+        <MyPlayers careers={careers} onBack={() => setScreen('menu')} onCreate={() => setScreen('create')} />
+      )}
+
+      {screen === 'shop' && <Shop onBack={() => setScreen('menu')} />}
+
+      {screen === 'create' && (
+        <CreationWizard
+          onCancel={() => setScreen('menu')}
+          onComplete={(record) => setCareers(saveCareer(record))}
+          onDone={(target) => setScreen(target)}
+        />
       )}
     </>
+  );
+}
+
+function App() {
+  return (
+    <I18nProvider>
+      <AppContent />
+    </I18nProvider>
   );
 }
 

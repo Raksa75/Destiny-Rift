@@ -1,23 +1,26 @@
 # Destiny: Summoner
 
 Un jeu de gestion de carrière/vie inspiré de **Destiny Eleven**, transposé à
-l'univers de **League of Legends**. Incarne un·e jeune joueur·se, du grind
-SoloQ amateur jusqu'aux sommets de la scène esportive, saison après saison.
+l'univers de **League of Legends**.
 
-## Boucle de jeu
+## Ce qui existe pour l'instant
 
-- Chaque mois, choisis une action : entraînement (mécanique, game sense,
-  synergie), étude de VODs, grind SoloQ, repos, stream, scrims d'équipe ou
-  tentative de recrutement.
-- Gère tes ressources (énergie, moral, santé) et fais progresser tes
-  statistiques.
-- Grimpe les échelons : Amateur → Équipe Académie → Ligue Challenger →
-  Ligue Pro, via des essais et des saisons simulées (18 matchs, classement,
-  promotion/relégation).
-- Des événements aléatoires ponctuent la carrière (blessures, clips viraux,
-  sponsors, drama d'équipe...).
-- Prends ta retraite volontairement ou subis les effets de l'âge, puis
-  découvre ton titre de légende final.
+- **Menu principal** avec bascule de langue (Français/English), et accès à
+  Mes Joueurs, la Boutique et la création d'une nouvelle carrière.
+- **Mes Joueurs** : historique de toutes les carrières créées (persistées en
+  local).
+- **Boutique** : écran à venir pour l'équipement cosmétique du joueur.
+- **Assistant de création de carrière** :
+  1. Pseudo du joueur
+  2. Pays d'origine, regroupé par région (Europe/LEC, Corée/LCK, Chine/LPL,
+     Amérique du Nord/LCS, LATAM/LLA, Australie/LCO, Asie/PCS)
+  3. Rôle (Top, Jungle, Mid, ADC, Support)
+  4. Régime alimentaire (impacte les stats de départ)
+  5. Parcours avant la pro / talent (impacte les stats et le potentiel)
+  6. Révélation des statistiques de départ (Micro, Macro, Teamfight, Lane,
+     Mental, Sérieux), de la popularité et du potentiel (0-5 étoiles), puis
+     proposition de 5 clubs de la région d'origine (Division 4 à Ligue
+     Majeure) dont la qualité dépend du niveau du joueur généré.
 
 ## Stack
 
@@ -33,6 +36,7 @@ npm run build    # build de production
 npm run lint      # oxlint
 ```
 
-Le moteur de jeu (état, actions, simulation de saison, événements) vit dans
-`src/game/`, entièrement découplé de l'UI (`src/components/`), pour pouvoir
-être testé et enrichi indépendamment.
+- `src/i18n/` : dictionnaires FR/EN et contexte de traduction
+- `src/data/` : régions/pays/ligues, régimes, talents, génération des clubs
+- `src/lib/storage.ts` : persistance locale des carrières
+- `src/components/` : UI (menu, mes joueurs, boutique, assistant de création)

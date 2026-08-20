@@ -1,0 +1,101 @@
+const fr = {
+  'app.title': 'Destiny: Summoner',
+
+  'lang.fr': 'Français',
+  'lang.en': 'English',
+
+  'menu.myPlayers': 'Mes Joueurs',
+  'menu.myPlayers.desc': "L'historique de toutes tes carrières",
+  'menu.shop': 'Boutique',
+  'menu.shop.desc': 'Équipement et cosmétiques',
+  'menu.newCareer': 'Nouvelle Carrière',
+  'menu.newCareer.desc': 'Créer un nouveau joueur',
+  'menu.tagline': "Deviens la légende de la Faille",
+
+  'common.back': 'Retour',
+  'common.next': 'Suivant',
+  'common.confirm': 'Confirmer',
+  'common.menu': 'Menu principal',
+
+  'players.title': 'Mes Joueurs',
+  'players.empty': "Aucune carrière pour l'instant. Lance-toi !",
+  'players.empty.cta': 'Créer une carrière',
+  'players.potential': 'Potentiel',
+  'players.popularity': 'Popularité',
+  'players.createdAt': 'Créé le',
+
+  'shop.title': 'Boutique',
+  'shop.comingSoon': 'Bientôt disponible',
+  'shop.comingSoon.desc': "L'équipement à porter pour ton joueur arrivera dans une prochaine mise à jour.",
+
+  'role.TOP': 'Top',
+  'role.JUNGLE': 'Jungle',
+  'role.MID': 'Mid',
+  'role.ADC': 'ADC',
+  'role.SUPPORT': 'Support',
+
+  'region.EUROPE': 'Europe',
+  'region.KOREA': 'Corée',
+  'region.CHINA': 'Chine',
+  'region.NA': 'Amérique du Nord',
+  'region.LATAM': 'LATAM',
+  'region.AUSTRALIA': 'Australie',
+  'region.ASIA': 'Asie',
+
+  'stat.micro': 'Micro',
+  'stat.macro': 'Macro',
+  'stat.teamfight': 'Teamfight',
+  'stat.lane': 'Lane',
+  'stat.mental': 'Mental',
+  'stat.serious': 'Sérieux',
+
+  'diet.BAD': 'Mange n’importe quoi',
+  'diet.BAD.desc': 'Fast-food et nuits courtes : impact négatif sur le mental et le sérieux.',
+  'diet.MID': 'Alimentation correcte',
+  'diet.MID.desc': 'Ni exemplaire ni catastrophique : aucun bonus, aucun malus.',
+  'diet.GOOD': 'Très discipliné',
+  'diet.GOOD.desc': 'Hygiène de vie irréprochable : bonus mental et sérieux.',
+
+  'talent.UNKNOWN': 'Inconnu',
+  'talent.UNKNOWN.desc': "Un talent brut sans historique. Personne ne l'attend, mais personne ne le connaît non plus.",
+  'talent.STAR_KID': 'Fils de star',
+  'talent.STAR_KID.desc': "Enfant d'un(e) ancien(ne) pro. Déjà populaire, mais sous pression constante (mental réduit).",
+  'talent.LATE_BLOOMER': 'Révélé sur le tard',
+  'talent.LATE_BLOOMER.desc': "A commencé tard. Moins affûté aujourd'hui, mais avec une marge de progression supérieure.",
+  'talent.ACADEMY': 'Club formateur moyen',
+  'talent.ACADEMY.desc': 'Formé dans une structure sérieuse. Bases solides en macro et en teamfight.',
+
+  'tier.DIV4': 'Division 4',
+  'tier.DIV3': 'Division 3',
+  'tier.DIV2': 'Division 2',
+  'tier.MAJOR': 'Ligue Majeure',
+
+  'creation.name.title': 'Comment veux-tu être appelé·e ?',
+  'creation.name.placeholder': 'ex: Faker2',
+  'creation.name.hint': 'Ton pseudo d’invocateur pour cette carrière.',
+
+  'creation.country.title': "Choisis ton pays d'origine",
+  'creation.country.hint': "Ton pays détermine la région dans laquelle tu débuteras ta carrière.",
+
+  'creation.role.title': 'Choisis ton rôle principal',
+  'creation.role.hint': 'Le poste sur lequel tu joueras tout au long de ta carrière.',
+
+  'creation.diet.title': 'Ton régime alimentaire',
+  'creation.diet.hint': 'Il influence tes statistiques de départ.',
+
+  'creation.talent.title': 'Ton parcours avant la pro',
+  'creation.talent.hint': 'Il influence tes statistiques de départ et ton potentiel.',
+
+  'creation.club.title': 'Choisis ton premier club',
+  'creation.club.hint': 'Voici 5 clubs de {league} intéressés par ton profil.',
+  'creation.club.statsReveal': 'Tes statistiques de départ',
+  'creation.club.pick': 'Signer ici',
+
+  'creation.done.title': 'Carrière lancée !',
+  'creation.done.text': '{name} rejoint {club} en tant que {role}. Bonne chance sur la Faille.',
+  'creation.done.viewPlayers': 'Voir mes joueurs',
+  'creation.done.menu': "Retour à l'accueil",
+} as const;
+
+export type Dict = Record<keyof typeof fr, string>;
+export default fr satisfies Dict;
