@@ -5,6 +5,7 @@ import { MainMenu } from './components/MainMenu';
 import { MyPlayers } from './components/MyPlayers';
 import { Shop } from './components/Shop';
 import { PlayScreen } from './components/PlayScreen';
+import { CareerEndScreen } from './components/CareerEndScreen';
 import { CreationWizard } from './components/creation/CreationWizard';
 import { loadCareers, saveCareer, updateCareer } from './lib/storage';
 import type { CareerRecord } from './types';
@@ -33,6 +34,7 @@ function AppContent() {
             setActiveCareerId(id);
             setScreen('play');
           }}
+          onImport={(imported) => setCareers(imported)}
         />
       )}
 
@@ -49,7 +51,15 @@ function AppContent() {
         />
       )}
 
-      {screen === 'play' && activeCareer && (
+      {screen === 'play' && activeCareer && activeCareer.retired && (
+        <CareerEndScreen
+          career={activeCareer}
+          onViewPlayers={() => setScreen('players')}
+          onMenu={() => setScreen('menu')}
+        />
+      )}
+
+      {screen === 'play' && activeCareer && !activeCareer.retired && (
         <PlayScreen
           career={activeCareer}
           onUpdate={(record) => setCareers(updateCareer(record))}

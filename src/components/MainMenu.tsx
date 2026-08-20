@@ -17,17 +17,20 @@ export function MainMenu({ onNavigate }: Props) {
 
         <nav className="w-full flex flex-col gap-3">
           <MenuTile
+            icon="🆕"
             title={t('menu.newCareer')}
             desc={t('menu.newCareer.desc')}
             onClick={() => onNavigate('create')}
             highlight
           />
           <MenuTile
+            icon="🎮"
             title={t('menu.myPlayers')}
             desc={t('menu.myPlayers.desc')}
             onClick={() => onNavigate('players')}
           />
           <MenuTile
+            icon="🛒"
             title={t('menu.shop')}
             desc={t('menu.shop.desc')}
             onClick={() => onNavigate('shop')}
@@ -39,11 +42,13 @@ export function MainMenu({ onNavigate }: Props) {
 }
 
 function MenuTile({
+  icon,
   title,
   desc,
   onClick,
   highlight,
 }: {
+  icon: string;
   title: string;
   desc: string;
   onClick: () => void;
@@ -58,7 +63,9 @@ function MenuTile({
           : 'border-rift-border bg-rift-panel/90 hover:border-rift-text'
       }`}
     >
-      <div className={`font-semibold ${highlight ? 'text-rift-blue' : 'text-rift-text-bright'}`}>{title}</div>
+      <div className={`font-semibold ${highlight ? 'text-rift-blue' : 'text-rift-text-bright'}`}>
+        {icon} {title}
+      </div>
       <div className="text-sm text-rift-text mt-0.5">{desc}</div>
     </button>
   );

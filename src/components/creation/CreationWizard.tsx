@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { regionForCountry } from '../../data/regions';
-import { generatePopularity, generatePotential, generateStats, overallRating } from '../../data/creation';
+import { generateLongevity, generatePopularity, generatePotential, generateStats, overallRating } from '../../data/creation';
 import { generateClubOffers } from '../../data/clubs';
 import { contractLengthYears } from '../../data/salary';
 import { START_AGE } from '../../types';
@@ -174,8 +174,19 @@ export function CreationWizard({ onCancel, onComplete, onDone }: Props) {
             contractUntilYear: year + contractLengthYears(club.tier),
             matchesPlayed: 0,
             wins: 0,
+            losses: 0,
             mvpCount: 0,
             selections: 0,
+            careerKills: 0,
+            careerAssists: 0,
+            careerCS: 0,
+            seasonKills: 0,
+            seasonAssists: 0,
+            longevity: generateLongevity(data.diet!, data.talent!),
+            homesickness: 0,
+            hasPlayedMajorSeason: club.tier === 'MAJOR',
+            retired: false,
+            retirementReason: null,
             titles: [],
             awards: [],
             turnCount: 0,

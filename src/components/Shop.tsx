@@ -6,7 +6,7 @@ export function Shop({ onBack }: { onBack: () => void }) {
   return (
     <div className="min-h-svh px-4 py-6 max-w-3xl mx-auto flex flex-col gap-6">
       <header className="flex items-center justify-between pt-12">
-        <h1 className="text-xl font-semibold text-rift-gold-bright">{t('shop.title')}</h1>
+        <h1 className="text-xl font-semibold text-rift-gold-bright">🛒 {t('shop.title')}</h1>
         <button
           onClick={onBack}
           className="text-sm text-rift-onbg-muted hover:text-rift-onbg transition-colors"

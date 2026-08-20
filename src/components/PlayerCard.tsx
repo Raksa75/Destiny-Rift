@@ -59,13 +59,17 @@ export function PlayerCard({ career }: { career: CareerRecord }) {
       </div>
 
       <div className="border-t border-rift-border pt-5">
-        <h2 className="text-sm uppercase tracking-wide text-rift-text mb-3">{t('play.stats')}</h2>
+        <h2 className="text-sm uppercase tracking-wide text-rift-text mb-3">📊 {t('play.stats')}</h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-3 text-sm">
           <div className="flex flex-col gap-2">
             <StatRow label={t('card.matchesPlayed')} value={career.matchesPlayed} />
             <StatRow label={t('card.wins')} value={career.wins} />
+            <StatRow label={t('card.losses')} value={career.losses} />
             <StatRow label={t('card.mvp')} value={career.mvpCount} />
             <StatRow label={t('card.selections')} value={career.selections} />
+            <StatRow label={t('card.kills')} value={career.careerKills} />
+            <StatRow label={t('card.assists')} value={career.careerAssists} />
+            <StatRow label={t('card.cs')} value={career.careerCS} />
           </div>
           <div className="flex flex-col gap-2">
             {CORE_STATS_A.map((key) => (
@@ -86,8 +90,12 @@ export function PlayerCard({ career }: { career: CareerRecord }) {
         <StatBar label={t('card.morale')} value={career.morale} color="bg-rift-blue" />
       </div>
 
+      {career.region !== career.club.region && (
+        <StatBar label={`🏠 ${t('card.homesickness')}`} value={career.homesickness} color="bg-rift-red" />
+      )}
+
       <section>
-        <h2 className="text-sm uppercase tracking-wide text-rift-text mb-2">{t('card.trophies')}</h2>
+        <h2 className="text-sm uppercase tracking-wide text-rift-text mb-2">🏆 {t('card.trophies')}</h2>
         <div className="flex items-center justify-between text-sm">
           <span className="text-rift-text-bright">{t('card.titlesWon')}</span>
           <span className="text-rift-text-bright font-medium">{career.titles.length}</span>
@@ -104,7 +112,7 @@ export function PlayerCard({ career }: { career: CareerRecord }) {
       </section>
 
       <section>
-        <h2 className="text-sm uppercase tracking-wide text-rift-text mb-2">{t('card.individualAwards')}</h2>
+        <h2 className="text-sm uppercase tracking-wide text-rift-text mb-2">🎖️ {t('card.individualAwards')}</h2>
         {career.awards.length === 0 ? (
           <p className="text-sm text-rift-text italic">{t('card.awardsEmpty')}</p>
         ) : (
@@ -117,7 +125,7 @@ export function PlayerCard({ career }: { career: CareerRecord }) {
       </section>
 
       <section>
-        <h2 className="text-sm uppercase tracking-wide text-rift-text mb-2">{t('card.trajectory')}</h2>
+        <h2 className="text-sm uppercase tracking-wide text-rift-text mb-2">📈 {t('card.trajectory')}</h2>
         <p className="text-sm text-rift-text italic mb-2">{t('card.trajectoryHint')}</p>
         <div className="flex flex-col gap-1.5 text-sm">
           <StatRow label={t('card.seasonsPlayed')} value={career.seasonsPlayed} />

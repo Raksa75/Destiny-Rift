@@ -15,7 +15,7 @@ export function DoneStep({ record, onPlay, onViewPlayers, onMenu }: Props) {
     <div className="min-h-svh flex items-center justify-center px-4">
       <div className="w-full max-w-md rounded-2xl border border-rift-gold/50 bg-rift-panel/90 p-8 text-center shadow-2xl">
         <p className="text-rift-blue text-xs tracking-[0.3em] uppercase mb-2">Destiny: Summoner</p>
-        <h1 className="text-2xl font-semibold text-rift-gold-bright mb-4">{t('creation.done.title')}</h1>
+        <h1 className="text-2xl font-semibold text-rift-gold-bright mb-4">🎉 {t('creation.done.title')}</h1>
         <p className="text-rift-text mb-8">
           {t('creation.done.text', {
             name: record.name,

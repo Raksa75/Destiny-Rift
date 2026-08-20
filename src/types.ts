@@ -59,8 +59,19 @@ export interface CareerRecord {
   contractUntilYear: number;
   matchesPlayed: number;
   wins: number;
+  losses: number;
   mvpCount: number;
   selections: number;
+  careerKills: number;
+  careerAssists: number;
+  careerCS: number;
+  seasonKills: number;
+  seasonAssists: number;
+  longevity: number; // 0-100, hidden: how gracefully stats age, and how late retirement hits
+  homesickness: number; // 0-100, morale drain from playing away from the home region
+  hasPlayedMajorSeason: boolean;
+  retired: boolean;
+  retirementReason: string | null;
   titles: string[];
   awards: string[];
   turnCount: number; // total questions answered since career start

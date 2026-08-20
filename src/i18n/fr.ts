@@ -23,6 +23,9 @@ const fr = {
   'players.potential': 'Potentiel',
   'players.popularity': 'Popularité',
   'players.createdAt': 'Créé le',
+  'players.export': 'Exporter la sauvegarde',
+  'players.import': 'Importer une sauvegarde',
+  'players.import.error': "Fichier de sauvegarde invalide.",
 
   'shop.title': 'Boutique',
   'shop.comingSoon': 'Bientôt disponible',
@@ -79,6 +82,7 @@ const fr = {
   'creation.name.title': 'Comment veux-tu être appelé·e ?',
   'creation.name.placeholder': 'ex: Faker2',
   'creation.name.hint': 'Ton pseudo d’invocateur pour cette carrière.',
+  'creation.name.random': 'Nom aléatoire',
 
   'creation.country.title': "Choisis ton pays d'origine",
   'creation.country.hint': "Ton pays détermine la région dans laquelle tu débuteras ta carrière.",
@@ -111,6 +115,8 @@ const fr = {
   'play.salary.log': '+{amount}€ de salaire versé par {club}.',
   'play.season': 'Saison {n}',
   'play.season.end': 'Fin de la saison {n}.',
+  'play.match.stats': '{kills} kills, {assists} assists, {cs} CS ce match.',
+  'play.homesick.log': 'Le mal du pays et la barrière de la langue freinent ta progression ce mois-ci.',
 
   'card.reputation': 'Réputation',
   'card.contract': '{salary} k€/an jusqu’en {year}',
@@ -118,8 +124,13 @@ const fr = {
   'card.wins': 'Victoires',
   'card.mvp': 'MVP',
   'card.selections': 'Sélections',
+  'card.losses': 'Défaites',
+  'card.kills': 'Kills',
+  'card.assists': 'Assists',
+  'card.cs': 'CS',
   'card.form': 'Forme',
   'card.morale': 'Moral',
+  'card.homesickness': 'Mal du pays',
   'card.trophies': 'Palmarès',
   'card.titlesWon': 'Titres remportés',
   'card.titlesEmpty': 'Rien encore. Un palmarès, ça se remplit une saison à la fois.',
@@ -166,6 +177,12 @@ const fr = {
   'season.transfer.hint': 'Choisis ton prochain club.',
   'season.transfer.sign': 'Signer',
   'season.transfer.log': 'Transfert : {name} rejoint {club} ({tier}) jusqu’en {year}.',
+  'season.transfer.stay.log': '{name} prolonge son contrat avec {club} jusqu’en {year}.',
+  'season.transfer.currentClub': 'Club actuel',
+  'season.transfer.salary': '{amount}€/mois',
+  'season.transfer.declineAll': 'Ne rien signer pour l’instant',
+  'season.transfer.decline.log': 'Aucune offre acceptée, {club} continue de te faire confiance.',
+  'season.selection.log': 'Convoqué·e pour une sélection all-star cette saison ! (+Sélections)',
 
   'season.poach.title': 'Un club te courtise',
   'season.poach.text': '{club} propose de te faire signer dès maintenant, malgré ton contrat en cours avec {current}.',
@@ -200,6 +217,27 @@ const fr = {
   'intl.log.RUNNER_UP': 'Finaliste de {event}.',
   'intl.log.SEMIFINALIST': 'Éliminé·e en demi-finale de {event}.',
   'intl.log.GROUP_STAGE': 'Éliminé·e en phase de groupes de {event}.',
+
+  'retire.title': 'Fin de carrière',
+  'retire.age': 'Le corps ne suit plus. L’heure de la retraite a sonné.',
+  'retire.coach': 'Reconversion réussie : place au rôle de coach, la carrière de joueur s’arrête ici.',
+  'retire.coachOffer.title': 'Une offre de reconversion',
+  'retire.coachOffer.text':
+    '{club} te propose de devenir coach de l’équipe plutôt que de continuer à jouer. Une belle porte de sortie.',
+  'retire.coachOffer.accept': 'Accepter et devenir coach',
+  'retire.coachOffer.decline': 'Refuser, continuer à jouer',
+  'retire.coachOffer.decline.log': 'Offre de reconversion en coach déclinée, la carrière de joueur continue.',
+
+  'award.MOST_KILLS': 'Meilleur·e killeur·euse du championnat {year}',
+  'award.MOST_KILLS.log': 'Sacré·e meilleur·e killeur·euse du championnat !',
+  'award.MOST_ASSISTS': 'Meilleur·e passeur·euse du championnat {year}',
+  'award.MOST_ASSISTS.log': 'Sacré·e meilleur·e passeur·euse du championnat !',
+  'award.SEASON_MVP': 'MVP de la saison {year}',
+  'award.SEASON_MVP.log': 'Élu·e MVP de la saison !',
+  'award.BEST_ROOKIE': 'Meilleure recrue de Ligue Majeure {year}',
+  'award.BEST_ROOKIE.log': 'Élu·e meilleure recrue de sa première saison en Ligue Majeure !',
+  'award.WORLD_BEST': 'Meilleur·e joueur·euse du monde {year}',
+  'award.WORLD_BEST.log': 'Considéré·e comme le/la meilleur·e joueur·euse du monde !',
 } as const;
 
 export type Dict = Record<keyof typeof fr, string>;

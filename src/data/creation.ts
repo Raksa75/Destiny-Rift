@@ -85,6 +85,21 @@ export function generatePopularity(talent: TalentId): number {
   return clamp(base + TALENT_POPULARITY_MOD[talent], 0, 100);
 }
 
+const DIET_LONGEVITY_MOD: Record<DietId, number> = { BAD: -10, MID: 0, GOOD: 10 };
+const TALENT_LONGEVITY_MOD: Record<TalentId, number> = {
+  UNKNOWN: 0,
+  STAR_KID: 0,
+  LATE_BLOOMER: 5,
+  ACADEMY: 5,
+};
+
+// Hidden stat: how gracefully the player's body/reflexes age. Never shown directly,
+// only felt through slower stat decay and a later forced-retirement age.
+export function generateLongevity(diet: DietId, talent: TalentId): number {
+  const base = 40 + Math.round(Math.random() * 20);
+  return clamp(base + DIET_LONGEVITY_MOD[diet] + TALENT_LONGEVITY_MOD[talent], 10, 100);
+}
+
 export function overallRating(stats: PlayerStats): number {
   const { micro, macro, teamfight, lane, mental, serious } = stats;
   return (micro + macro + teamfight + lane) / 4 * 0.7 + mental * 0.15 + serious * 0.15;

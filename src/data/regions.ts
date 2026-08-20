@@ -34,7 +34,7 @@ export const REGIONS: Region[] = [
   },
   {
     id: 'LATAM',
-    league: 'LLA',
+    league: 'CBLOL',
     countries: ['Brésil', 'Argentine', 'Mexique', 'Chili', 'Colombie', 'Pérou'],
   },
   {
