@@ -40,13 +40,16 @@ export function ClubStep({ stats, potential, popularity, offers, region, onNext,
     >
       <div className="flex flex-col gap-6">
         <section className="rounded-xl border border-rift-border bg-rift-panel/80 p-4">
-          <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
             <p className="text-xs uppercase tracking-wide text-rift-text">{t('creation.club.statsReveal')}</p>
-            <div className="flex items-center gap-3 text-xs text-rift-text">
+            <div className="flex items-center gap-4 text-xs text-rift-text">
               <span>
-                {t('players.popularity')}: <span className="text-rift-text-bright">{popularity}</span>
+                {t('players.popularity')}: <span className="text-rift-text-bright font-medium">{popularity}</span>
               </span>
-              <PotentialStars value={potential} />
+              <span className="flex items-center gap-1.5">
+                {t('players.potential')}:
+                <PotentialStars value={potential} />
+              </span>
             </div>
           </div>
           <div className="grid grid-cols-2 gap-x-6 gap-y-3">
