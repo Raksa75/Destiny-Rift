@@ -46,10 +46,23 @@ export interface CareerRecord {
   stats: PlayerStats;
   potential: number; // 0-5
   popularity: number; // 0-100
+  form: number; // 0-100
+  morale: number; // 0-100
   money: number;
+  careerEarnings: number; // cumulative gross earnings, never decreases
+  peakOverall: number;
   age: number;
   month: number; // 1-12
+  year: number;
   club: ClubOffer;
+  firstClub: ClubOffer;
+  contractUntilYear: number;
+  matchesPlayed: number;
+  wins: number;
+  mvpCount: number;
+  selections: number;
+  titles: string[];
+  awards: string[];
   log: CareerLogEntry[];
   createdAt: string;
 }

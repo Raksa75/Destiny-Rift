@@ -71,6 +71,10 @@ const en: Dict = {
   'tier.DIV3': 'Division 3',
   'tier.DIV2': 'Division 2',
   'tier.MAJOR': 'Major League',
+  'tier.short.DIV4': 'D4',
+  'tier.short.DIV3': 'D3',
+  'tier.short.DIV2': 'D2',
+  'tier.short.MAJOR': 'ML',
 
   'creation.name.title': 'What should we call you?',
   'creation.name.placeholder': 'e.g. Faker2',
@@ -105,6 +109,27 @@ const en: Dict = {
   'play.stats': 'Stats',
   'play.journal': 'Journal',
   'play.salary.log': '+{amount}€ salary paid by {club}.',
+
+  'card.reputation': 'Reputation',
+  'card.contract': '{salary}k€/yr until {year}',
+  'card.matchesPlayed': 'Matches played',
+  'card.wins': 'Wins',
+  'card.mvp': 'MVP',
+  'card.selections': 'Selections',
+  'card.form': 'Form',
+  'card.morale': 'Morale',
+  'card.trophies': 'Trophies',
+  'card.titlesWon': 'Titles won',
+  'card.titlesEmpty': 'Nothing yet. A trophy case fills up one season at a time.',
+  'card.individualAwards': 'Individual awards',
+  'card.awardsEmpty': 'No individual awards yet. Those come with great seasons.',
+  'card.trajectory': 'Rating & journey',
+  'card.trajectoryHint': 'Your rating will take shape season after season.',
+  'card.seasonsPlayed': 'Seasons played',
+  'card.trainingClub': 'Training club',
+  'card.peakOvr': 'Peak OVR',
+  'card.careerEarnings': 'Career earnings',
+  'card.fortune': 'Fortune',
 };
 
 export default en;

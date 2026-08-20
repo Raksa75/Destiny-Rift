@@ -6,6 +6,8 @@ export interface QuestionOption {
   statDeltas: Partial<PlayerStats>;
   moneyDelta?: number;
   popularityDelta?: number;
+  formDelta?: number;
+  moraleDelta?: number;
 }
 
 export interface Question {

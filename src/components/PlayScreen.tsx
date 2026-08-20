@@ -2,10 +2,10 @@ import { useState } from 'react';
 import { useI18n } from '../i18n';
 import { pickQuestion } from '../data/questions';
 import { monthlySalary } from '../data/salary';
+import { overallRating } from '../data/creation';
 import type { QuestionOption } from '../data/questionTypes';
 import type { CareerRecord, StatKey } from '../types';
-import { StatBar } from './StatBar';
-import { PotentialStars } from './PotentialStars';
+import { PlayerCard } from './PlayerCard';
 
 interface Props {
   career: CareerRecord;
@@ -33,14 +33,21 @@ export function PlayScreen({ career, onUpdate, onBack }: Props) {
 
     let month = career.month + 1;
     let age = career.age;
+    let year = career.year;
     if (month > 12) {
       month = 1;
       age += 1;
+      year += 1;
     }
 
     const salary = monthlySalary(career.club.tier, career.region);
-    const money = career.money + (option.moneyDelta ?? 0) + salary;
+    const moneyGain = (option.moneyDelta ?? 0) + salary;
+    const money = career.money + moneyGain;
+    const careerEarnings = career.careerEarnings + Math.max(0, moneyGain);
     const popularity = clamp(career.popularity + (option.popularityDelta ?? 0));
+    const form = clamp(career.form + (option.formDelta ?? 0));
+    const morale = clamp(career.morale + (option.moraleDelta ?? 0));
+    const peakOverall = Math.max(career.peakOverall, Math.round(overallRating(stats)));
 
     const log = [
       { age: career.age, month: career.month, text: option.text },
@@ -52,39 +59,31 @@ export function PlayScreen({ career, onUpdate, onBack }: Props) {
     setRecentIds(nextRecentIds);
     setQuestion(pickQuestion(lang, nextRecentIds));
 
-    onUpdate({ ...career, stats, money, popularity, age, month, log });
+    onUpdate({
+      ...career,
+      stats,
+      money,
+      careerEarnings,
+      popularity,
+      form,
+      morale,
+      peakOverall,
+      age,
+      month,
+      year,
+      log,
+    });
   };
 
   return (
-    <div className="min-h-svh px-4 py-6 max-w-3xl mx-auto flex flex-col gap-6">
-      <header className="rounded-2xl border border-rift-border bg-rift-panel/80 p-5 flex flex-wrap items-center justify-between gap-4 mt-12">
-        <div>
-          <p className="text-rift-blue text-xs tracking-[0.3em] uppercase mb-1">{career.club.name}</p>
-          <h1 className="text-xl font-semibold text-rift-gold-bright">
-            {career.name} <span className="text-rift-text font-normal">· {t(`role.${career.role}` as never)}</span>
-          </h1>
-        </div>
-        <div className="flex gap-6 text-center">
-          <MiniStat label={t('play.age')} value={t('play.ageYears', { age: String(career.age) })} />
-          <MiniStat label={t('play.money')} value={`${career.money}€`} />
-          <div className="flex flex-col items-center gap-1">
-            <span className="text-[11px] text-rift-text uppercase tracking-wide">{t('players.potential')}</span>
-            <PotentialStars value={career.potential} />
-          </div>
-        </div>
+    <div className="min-h-svh px-4 py-6 pb-20 max-w-3xl mx-auto flex flex-col gap-6">
+      <div className="flex justify-end mt-12">
         <button onClick={onBack} className="text-sm text-rift-text hover:text-rift-text-bright transition-colors">
           {t('common.menu')}
         </button>
-      </header>
+      </div>
 
-      <section className="rounded-2xl border border-rift-border bg-rift-panel/80 p-5">
-        <h2 className="text-sm uppercase tracking-wide text-rift-text mb-3">{t('play.stats')}</h2>
-        <div className="grid grid-cols-2 gap-x-6 gap-y-3">
-          {STAT_KEYS.map((key) => (
-            <StatBar key={key} label={t(`stat.${key}` as never)} value={career.stats[key]} color="bg-rift-gold" />
-          ))}
-        </div>
-      </section>
+      <PlayerCard career={career} />
 
       <section className="rounded-2xl border border-rift-blue/40 bg-rift-panel/80 p-5">
         <p className="text-rift-text-bright font-medium mb-4">{question.text}</p>
@@ -114,15 +113,15 @@ export function PlayScreen({ career, onUpdate, onBack }: Props) {
           ))}
         </div>
       </section>
-    </div>
-  );
-}
 
-function MiniStat({ label, value }: { label: string; value: string }) {
-  return (
-    <div>
-      <p className="text-[11px] text-rift-text uppercase tracking-wide">{label}</p>
-      <p className="text-rift-text-bright font-medium">{value}</p>
+      <div className="fixed bottom-0 left-0 right-0 border-t border-rift-border bg-rift-panel/95 backdrop-blur px-4 py-3">
+        <div className="max-w-3xl mx-auto flex items-center justify-between text-sm">
+          <span className="text-rift-text">{career.year}</span>
+          <span className="text-rift-text-bright font-medium">
+            {t('card.fortune')}: {career.money}€
+          </span>
+        </div>
+      </div>
     </div>
   );
 }

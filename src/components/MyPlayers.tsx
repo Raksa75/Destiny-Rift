@@ -1,4 +1,5 @@
 import { useI18n } from '../i18n';
+import { overallRating } from '../data/creation';
 import type { CareerRecord } from '../types';
 import { PotentialStars } from './PotentialStars';
 
@@ -49,7 +50,12 @@ export function MyPlayers({ careers, onBack, onCreate, onSelect }: Props) {
                     {t(`role.${c.role}` as never)} · {c.country} · {t('play.ageYears', { age: String(c.age) })}
                   </p>
                 </div>
-                <PotentialStars value={c.potential} />
+                <div className="flex items-center gap-2">
+                  <span className="rounded bg-rift-gold text-rift-bg font-bold text-xs px-2 py-1 leading-none">
+                    {Math.round(overallRating(c.stats))}
+                  </span>
+                  <PotentialStars value={c.potential} />
+                </div>
               </div>
               <p className="text-sm text-rift-blue mt-3">
                 {c.club.name} — {t(`tier.${c.club.tier}` as never)}

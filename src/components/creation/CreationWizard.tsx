@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { regionForCountry } from '../../data/regions';
 import { generatePopularity, generatePotential, generateStats, overallRating } from '../../data/creation';
 import { generateClubOffers } from '../../data/clubs';
+import { contractLengthYears } from '../../data/salary';
 import { START_AGE } from '../../types';
 import type { CareerRecord, ClubOffer, DietId, PlayerStats, Role, TalentId } from '../../types';
 import { NameStep } from './NameStep';
@@ -148,6 +149,7 @@ export function CreationWizard({ onCancel, onComplete, onDone }: Props) {
         offers={clubStage.offers}
         region={region.id}
         onNext={(club) => {
+          const year = new Date().getFullYear();
           const newRecord: CareerRecord = {
             id: crypto.randomUUID(),
             name: data.name,
@@ -159,10 +161,23 @@ export function CreationWizard({ onCancel, onComplete, onDone }: Props) {
             stats: clubStage.stats,
             potential: clubStage.potential,
             popularity: clubStage.popularity,
+            form: 70,
+            morale: 70,
             money: 0,
+            careerEarnings: 0,
+            peakOverall: Math.round(overallRating(clubStage.stats)),
             age: START_AGE,
             month: 1,
+            year,
             club,
+            firstClub: club,
+            contractUntilYear: year + contractLengthYears(club.tier),
+            matchesPlayed: 0,
+            wins: 0,
+            mvpCount: 0,
+            selections: 0,
+            titles: [],
+            awards: [],
             log: [],
             createdAt: new Date().toISOString(),
           };

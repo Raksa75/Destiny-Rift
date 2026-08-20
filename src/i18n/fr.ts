@@ -69,6 +69,10 @@ const fr = {
   'tier.DIV3': 'Division 3',
   'tier.DIV2': 'Division 2',
   'tier.MAJOR': 'Ligue Majeure',
+  'tier.short.DIV4': 'D4',
+  'tier.short.DIV3': 'D3',
+  'tier.short.DIV2': 'D2',
+  'tier.short.MAJOR': 'LM',
 
   'creation.name.title': 'Comment veux-tu être appelé·e ?',
   'creation.name.placeholder': 'ex: Faker2',
@@ -103,6 +107,27 @@ const fr = {
   'play.stats': 'Statistiques',
   'play.journal': 'Journal',
   'play.salary.log': '+{amount}€ de salaire versé par {club}.',
+
+  'card.reputation': 'Réputation',
+  'card.contract': '{salary} k€/an jusqu’en {year}',
+  'card.matchesPlayed': 'Matchs joués',
+  'card.wins': 'Victoires',
+  'card.mvp': 'MVP',
+  'card.selections': 'Sélections',
+  'card.form': 'Forme',
+  'card.morale': 'Moral',
+  'card.trophies': 'Palmarès',
+  'card.titlesWon': 'Titres remportés',
+  'card.titlesEmpty': 'Rien encore. Un palmarès, ça se remplit une saison à la fois.',
+  'card.individualAwards': 'Distinctions individuelles',
+  'card.awardsEmpty': 'Aucune récompense individuelle. Elles viennent avec les grandes saisons.',
+  'card.trajectory': 'Cote et parcours',
+  'card.trajectoryHint': 'Ta cote se dessinera saison après saison.',
+  'card.seasonsPlayed': 'Saisons jouées',
+  'card.trainingClub': 'Club formateur',
+  'card.peakOvr': 'OVR max',
+  'card.careerEarnings': 'Gains de carrière',
+  'card.fortune': 'Fortune',
 } as const;
 
 export type Dict = Record<keyof typeof fr, string>;
