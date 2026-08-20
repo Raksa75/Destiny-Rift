@@ -95,8 +95,16 @@ const en: Dict = {
 
   'creation.done.title': 'Career launched!',
   'creation.done.text': '{name} joins {club} as {role}. Good luck on the Rift.',
+  'creation.done.play': 'Start the career',
   'creation.done.viewPlayers': 'View my players',
   'creation.done.menu': 'Back to home',
+
+  'play.money': 'Money',
+  'play.age': 'Age',
+  'play.ageYears': 'Age {age}',
+  'play.stats': 'Stats',
+  'play.journal': 'Journal',
+  'play.salary.log': '+{amount}€ salary paid by {club}.',
 };
 
 export default en;

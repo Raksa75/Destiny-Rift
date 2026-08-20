@@ -6,9 +6,10 @@ interface Props {
   careers: CareerRecord[];
   onBack: () => void;
   onCreate: () => void;
+  onSelect: (id: string) => void;
 }
 
-export function MyPlayers({ careers, onBack, onCreate }: Props) {
+export function MyPlayers({ careers, onBack, onCreate, onSelect }: Props) {
   const { t, lang } = useI18n();
 
   return (
@@ -36,12 +37,16 @@ export function MyPlayers({ careers, onBack, onCreate }: Props) {
       ) : (
         <div className="grid sm:grid-cols-2 gap-4">
           {careers.map((c) => (
-            <div key={c.id} className="rounded-xl border border-rift-border bg-rift-panel/80 p-4">
+            <button
+              key={c.id}
+              onClick={() => onSelect(c.id)}
+              className="text-left rounded-xl border border-rift-border bg-rift-panel/80 hover:border-rift-blue p-4 transition-colors"
+            >
               <div className="flex items-start justify-between">
                 <div>
                   <p className="font-semibold text-rift-text-bright">{c.name}</p>
                   <p className="text-xs text-rift-text mt-0.5">
-                    {t(`role.${c.role}` as never)} · {c.country}
+                    {t(`role.${c.role}` as never)} · {c.country} · {t('play.ageYears', { age: String(c.age) })}
                   </p>
                 </div>
                 <PotentialStars value={c.potential} />
@@ -51,13 +56,13 @@ export function MyPlayers({ careers, onBack, onCreate }: Props) {
               </p>
               <div className="flex justify-between text-xs text-rift-text mt-3">
                 <span>
-                  {t('players.popularity')}: <span className="text-rift-text-bright">{c.popularity}</span>
+                  {t('play.money')}: <span className="text-rift-text-bright">{c.money}€</span>
                 </span>
                 <span>
                   {t('players.createdAt')}: {new Date(c.createdAt).toLocaleDateString(lang)}
                 </span>
               </div>
-            </div>
+            </button>
           ))}
         </div>
       )}

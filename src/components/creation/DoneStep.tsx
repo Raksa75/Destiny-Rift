@@ -3,11 +3,12 @@ import type { CareerRecord } from '../../types';
 
 interface Props {
   record: CareerRecord;
+  onPlay: () => void;
   onViewPlayers: () => void;
   onMenu: () => void;
 }
 
-export function DoneStep({ record, onViewPlayers, onMenu }: Props) {
+export function DoneStep({ record, onPlay, onViewPlayers, onMenu }: Props) {
   const { t } = useI18n();
 
   return (
@@ -24,14 +25,20 @@ export function DoneStep({ record, onViewPlayers, onMenu }: Props) {
         </p>
         <div className="flex flex-col gap-3">
           <button
-            onClick={onViewPlayers}
+            onClick={onPlay}
             className="rounded-lg bg-rift-blue hover:bg-rift-blue-dark text-rift-bg font-semibold py-3 transition-colors"
+          >
+            {t('creation.done.play')}
+          </button>
+          <button
+            onClick={onViewPlayers}
+            className="rounded-lg border border-rift-border text-rift-text-bright hover:border-rift-text py-3 transition-colors"
           >
             {t('creation.done.viewPlayers')}
           </button>
           <button
             onClick={onMenu}
-            className="rounded-lg border border-rift-border text-rift-text hover:text-rift-text-bright py-3 transition-colors"
+            className="text-sm text-rift-text hover:text-rift-text-bright transition-colors"
           >
             {t('creation.done.menu')}
           </button>

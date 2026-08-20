@@ -93,8 +93,16 @@ const fr = {
 
   'creation.done.title': 'Carrière lancée !',
   'creation.done.text': '{name} rejoint {club} en tant que {role}. Bonne chance sur la Faille.',
+  'creation.done.play': 'Commencer la carrière',
   'creation.done.viewPlayers': 'Voir mes joueurs',
   'creation.done.menu': "Retour à l'accueil",
+
+  'play.money': 'Argent',
+  'play.age': 'Âge',
+  'play.ageYears': '{age} ans',
+  'play.stats': 'Statistiques',
+  'play.journal': 'Journal',
+  'play.salary.log': '+{amount}€ de salaire versé par {club}.',
 } as const;
 
 export type Dict = Record<keyof typeof fr, string>;

@@ -29,6 +29,12 @@ export interface ClubOffer {
   region: RegionId;
 }
 
+export interface CareerLogEntry {
+  age: number;
+  month: number;
+  text: string;
+}
+
 export interface CareerRecord {
   id: string;
   name: string;
@@ -40,6 +46,13 @@ export interface CareerRecord {
   stats: PlayerStats;
   potential: number; // 0-5
   popularity: number; // 0-100
+  money: number;
+  age: number;
+  month: number; // 1-12
   club: ClubOffer;
+  log: CareerLogEntry[];
   createdAt: string;
 }
+
+export const START_AGE = 14;
+

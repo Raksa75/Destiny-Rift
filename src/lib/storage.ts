@@ -18,3 +18,9 @@ export function saveCareer(record: CareerRecord): CareerRecord[] {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(careers));
   return careers;
 }
+
+export function updateCareer(record: CareerRecord): CareerRecord[] {
+  const careers = loadCareers().map((c) => (c.id === record.id ? record : c));
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(careers));
+  return careers;
+}

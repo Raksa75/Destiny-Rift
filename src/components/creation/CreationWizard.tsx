@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { regionForCountry } from '../../data/regions';
 import { generatePopularity, generatePotential, generateStats, overallRating } from '../../data/creation';
 import { generateClubOffers } from '../../data/clubs';
+import { START_AGE } from '../../types';
 import type { CareerRecord, ClubOffer, DietId, PlayerStats, Role, TalentId } from '../../types';
 import { NameStep } from './NameStep';
 import { CountryStep } from './CountryStep';
@@ -32,7 +33,7 @@ interface ClubStageData {
 interface Props {
   onCancel: () => void;
   onComplete: (record: CareerRecord) => void;
-  onDone: (target: 'players' | 'menu') => void;
+  onDone: (target: 'players' | 'menu' | 'play') => void;
 }
 
 export function CreationWizard({ onCancel, onComplete, onDone }: Props) {
@@ -158,7 +159,11 @@ export function CreationWizard({ onCancel, onComplete, onDone }: Props) {
             stats: clubStage.stats,
             potential: clubStage.potential,
             popularity: clubStage.popularity,
+            money: 0,
+            age: START_AGE,
+            month: 1,
             club,
+            log: [],
             createdAt: new Date().toISOString(),
           };
           setRecord(newRecord);
@@ -174,7 +179,12 @@ export function CreationWizard({ onCancel, onComplete, onDone }: Props) {
 
   if (step === 'done' && record) {
     return (
-      <DoneStep record={record} onViewPlayers={() => onDone('players')} onMenu={() => onDone('menu')} />
+      <DoneStep
+        record={record}
+        onPlay={() => onDone('play')}
+        onViewPlayers={() => onDone('players')}
+        onMenu={() => onDone('menu')}
+      />
     );
   }
 
