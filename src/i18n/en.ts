@@ -81,11 +81,6 @@ const en: Dict = {
   'tier.short.DIV2': 'D2',
   'tier.short.MAJOR': 'ML',
 
-  'creation.name.title': 'What should we call you?',
-  'creation.name.placeholder': 'e.g. Faker2',
-  'creation.name.hint': 'Your summoner name for this career.',
-  'creation.name.random': 'Random name',
-
   'creation.country.title': 'Choose your home country',
   'creation.country.hint': 'Your country determines the region where your career begins.',
 

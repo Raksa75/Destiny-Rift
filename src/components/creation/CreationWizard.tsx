@@ -2,10 +2,10 @@ import { useMemo, useState } from 'react';
 import { regionForCountry } from '../../data/regions';
 import { generateLongevity, generatePopularity, generatePotential, generateStats, overallRating } from '../../data/creation';
 import { generateClubOffers } from '../../data/clubs';
+import { generateRandomName } from '../../data/nameGenerator';
 import { contractLengthYears } from '../../data/salary';
 import { START_AGE } from '../../types';
 import type { CareerRecord, ClubOffer, DietId, PlayerStats, Role, TalentId } from '../../types';
-import { NameStep } from './NameStep';
 import { CountryStep } from './CountryStep';
 import { RoleStep } from './RoleStep';
 import { DietStep } from './DietStep';
@@ -13,8 +13,8 @@ import { TalentStep } from './TalentStep';
 import { ClubStep } from './ClubStep';
 import { DoneStep } from './DoneStep';
 
-type Step = 'name' | 'country' | 'role' | 'diet' | 'talent' | 'club' | 'done';
-const STEP_ORDER: Step[] = ['name', 'country', 'role', 'diet', 'talent', 'club'];
+type Step = 'country' | 'role' | 'diet' | 'talent' | 'club' | 'done';
+const STEP_ORDER: Step[] = ['country', 'role', 'diet', 'talent', 'club'];
 
 interface WizardData {
   name: string;
@@ -38,9 +38,9 @@ interface Props {
 }
 
 export function CreationWizard({ onCancel, onComplete, onDone }: Props) {
-  const [step, setStep] = useState<Step>('name');
+  const [step, setStep] = useState<Step>('country');
   const [data, setData] = useState<WizardData>({
-    name: '',
+    name: generateRandomName(),
     country: null,
     role: null,
     diet: null,
@@ -61,21 +61,6 @@ export function CreationWizard({ onCancel, onComplete, onDone }: Props) {
   };
 
   const region = useMemo(() => (data.country ? regionForCountry(data.country) : null), [data.country]);
-
-  if (step === 'name') {
-    return (
-      <NameStep
-        value={data.name}
-        onNext={(name) => {
-          setData((d) => ({ ...d, name }));
-          setStep('country');
-        }}
-        onBack={goBack}
-        step={stepIndex}
-        totalSteps={STEP_ORDER.length}
-      />
-    );
-  }
 
   if (step === 'country') {
     return (

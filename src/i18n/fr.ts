@@ -79,11 +79,6 @@ const fr = {
   'tier.short.DIV2': 'D2',
   'tier.short.MAJOR': 'LM',
 
-  'creation.name.title': 'Comment veux-tu être appelé·e ?',
-  'creation.name.placeholder': 'ex: Faker2',
-  'creation.name.hint': 'Ton pseudo d’invocateur pour cette carrière.',
-  'creation.name.random': 'Nom aléatoire',
-
   'creation.country.title': "Choisis ton pays d'origine",
   'creation.country.hint': "Ton pays détermine la région dans laquelle tu débuteras ta carrière.",
 
