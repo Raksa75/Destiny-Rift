@@ -14,7 +14,7 @@ interface Props {
   onBack: () => void;
 }
 
-const STAT_KEYS: StatKey[] = ['micro', 'macro', 'teamfight', 'lane', 'mental', 'serious'];
+const STAT_KEYS: StatKey[] = ['micro', 'macro', 'teamfight', 'lane', 'mental', 'serious', 'coach', 'locker'];
 
 function clamp(n: number, lo = 0, hi = 100) {
   return Math.max(lo, Math.min(hi, n));
@@ -93,7 +93,7 @@ export function PlayScreen({ career, onUpdate, onBack }: Props) {
         <span className="text-sm text-rift-blue font-medium">
           {t('play.season', { n: String(career.seasonsPlayed + 1) })} · {monthInSeason}/{SEASON_LENGTH_MONTHS}
         </span>
-        <button onClick={onBack} className="text-sm text-rift-text hover:text-rift-text-bright transition-colors">
+        <button onClick={onBack} className="text-sm text-rift-onbg-muted hover:text-rift-onbg transition-colors">
           {t('common.menu')}
         </button>
       </div>

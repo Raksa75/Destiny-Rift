@@ -16,7 +16,7 @@ export type DietId = 'BAD' | 'MID' | 'GOOD';
 
 export type TalentId = 'UNKNOWN' | 'STAR_KID' | 'LATE_BLOOMER' | 'ACADEMY';
 
-export type StatKey = 'micro' | 'macro' | 'teamfight' | 'lane' | 'mental' | 'serious';
+export type StatKey = 'micro' | 'macro' | 'teamfight' | 'lane' | 'mental' | 'serious' | 'coach' | 'locker';
 
 export type PlayerStats = Record<StatKey, number>;
 

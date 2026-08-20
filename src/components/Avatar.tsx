@@ -1,10 +1,10 @@
 const PALETTE = [
-  '#0ac8b9',
-  '#c8aa6e',
-  '#e84057',
-  '#4caf6f',
-  '#7c5cff',
-  '#e8a03f',
+  '#0a9c90',
+  '#a8822f',
+  '#c23a52',
+  '#2f8f52',
+  '#6a4fd6',
+  '#c47c1f',
 ];
 
 function hashString(input: string): number {
@@ -32,7 +32,7 @@ export function Avatar({ name, size = 72 }: { name: string; size?: number }) {
       style={{
         width: size,
         height: size,
-        background: `linear-gradient(160deg, ${color}33, ${color}11)`,
+        background: `linear-gradient(160deg, ${color}30, ${color}14)`,
         color,
         fontSize: size * 0.32,
       }}

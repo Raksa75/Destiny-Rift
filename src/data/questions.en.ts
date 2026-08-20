@@ -5,9 +5,9 @@ const questions: Question[] = [
     id: 'extra_practice',
     text: 'Your coach offers an extra practice tool session on a weeknight.',
     options: [
-      { id: 'full', text: 'You go all in', statDeltas: { micro: 4, mental: -2 }, formDelta: -8, moraleDelta: -2 },
+      { id: 'full', text: 'You go all in', statDeltas: { micro: 4, mental: -2, coach: 3 }, formDelta: -8, moraleDelta: -2 },
       { id: 'light', text: "You do a bit, without pushing too hard", statDeltas: { micro: 1 }, formDelta: -2 },
-      { id: 'refuse', text: 'You refuse to rest instead', statDeltas: { mental: 2, serious: -2 }, formDelta: 5, moraleDelta: 2 },
+      { id: 'refuse', text: 'You refuse to rest instead', statDeltas: { mental: 2, serious: -2, coach: -2 }, formDelta: 5, moraleDelta: 2 },
     ],
   },
   {
@@ -23,9 +23,9 @@ const questions: Question[] = [
     id: 'scrim_loss',
     text: 'After a rough scrim loss, your team is demoralized.',
     options: [
-      { id: 'motivate', text: 'You rally the group', statDeltas: { mental: 3, teamfight: 2 }, formDelta: -1, moraleDelta: 4 },
+      { id: 'motivate', text: 'You rally the group', statDeltas: { mental: 3, teamfight: 2, locker: 4 }, formDelta: -1, moraleDelta: 4 },
       { id: 'silent', text: 'You stay quiet, focused on yourself', statDeltas: { micro: 1 } },
-      { id: 'blame', text: 'You blame a teammate', statDeltas: { mental: -3 }, popularityDelta: -2, moraleDelta: -5 },
+      { id: 'blame', text: 'You blame a teammate', statDeltas: { mental: -3, locker: -6 }, popularityDelta: -2, moraleDelta: -5 },
     ],
   },
   {
@@ -68,18 +68,18 @@ const questions: Question[] = [
     id: 'public_criticism',
     text: 'A teammate criticizes you publicly on social media.',
     options: [
-      { id: 'calm', text: 'You reply calmly in private', statDeltas: { mental: 2, serious: 2 }, moraleDelta: 2 },
+      { id: 'calm', text: 'You reply calmly in private', statDeltas: { mental: 2, serious: 2, locker: 3 }, moraleDelta: 2 },
       { id: 'ignore', text: 'You ignore it completely', statDeltas: {}, moraleDelta: -1 },
-      { id: 'clash', text: 'You clash back publicly', statDeltas: { mental: -2 }, popularityDelta: -4, formDelta: -1, moraleDelta: -5 },
+      { id: 'clash', text: 'You clash back publicly', statDeltas: { mental: -2, locker: -5 }, popularityDelta: -4, formDelta: -1, moraleDelta: -5 },
     ],
   },
   {
     id: 'macro_bootcamp',
     text: 'Your club offers a macro bootcamp with a former pro.',
     options: [
-      { id: 'full', text: 'You go all in', statDeltas: { macro: 4 }, moneyDelta: -50, formDelta: -4, moraleDelta: 1 },
+      { id: 'full', text: 'You go all in', statDeltas: { macro: 4, coach: 4 }, moneyDelta: -50, formDelta: -4, moraleDelta: 1 },
       { id: 'light', text: 'You go without investing too much', statDeltas: { macro: 1 }, formDelta: -1 },
-      { id: 'solo', text: 'You’d rather practice solo', statDeltas: { micro: 2 }, formDelta: -2 },
+      { id: 'solo', text: 'You’d rather practice solo', statDeltas: { micro: 2, coach: -3 }, formDelta: -2 },
     ],
   },
   {
@@ -96,17 +96,17 @@ const questions: Question[] = [
     text: 'A major patch completely changes your role.',
     options: [
       { id: 'theorycraft', text: 'You spend hours theorycrafting', statDeltas: { macro: 3, mental: -1 }, formDelta: -4, moraleDelta: -1 },
-      { id: 'adapt', text: 'You adapt gradually', statDeltas: { lane: 2 }, formDelta: -1, moraleDelta: 1 },
-      { id: 'refuse', text: 'You rage and refuse to change your habits', statDeltas: { mental: -3, lane: -2 }, moraleDelta: -3 },
+      { id: 'adapt', text: 'You adapt gradually', statDeltas: { lane: 2, coach: 3 }, formDelta: -1, moraleDelta: 1 },
+      { id: 'refuse', text: 'You rage and refuse to change your habits', statDeltas: { mental: -3, lane: -2, coach: -4 }, moraleDelta: -3 },
     ],
   },
   {
     id: 'series_loss',
     text: 'Your team loses an important series, the mood is tense.',
     options: [
-      { id: 'debrief', text: 'You suggest a calm debrief with the group', statDeltas: { teamfight: 3, mental: 1 }, formDelta: -1, moraleDelta: 3 },
-      { id: 'coach', text: 'You let the coach handle it', statDeltas: {} },
-      { id: 'isolate', text: 'You isolate yourself and cut communication', statDeltas: { teamfight: -3, mental: -1 }, formDelta: -1, moraleDelta: -4 },
+      { id: 'debrief', text: 'You suggest a calm debrief with the group', statDeltas: { teamfight: 3, mental: 1, locker: 3 }, formDelta: -1, moraleDelta: 3 },
+      { id: 'coach', text: 'You let the coach handle it', statDeltas: { coach: 4 } },
+      { id: 'isolate', text: 'You isolate yourself and cut communication', statDeltas: { teamfight: -3, mental: -1, locker: -4 }, formDelta: -1, moraleDelta: -4 },
     ],
   },
   {

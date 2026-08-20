@@ -4,16 +4,16 @@ export const DIET_IDS: DietId[] = ['BAD', 'MID', 'GOOD'];
 export const TALENT_IDS: TalentId[] = ['UNKNOWN', 'STAR_KID', 'LATE_BLOOMER', 'ACADEMY'];
 
 export const DIET_STAT_MODS: Record<DietId, Partial<PlayerStats>> = {
-  BAD: { mental: -8, serious: -10 },
+  BAD: { mental: -8, serious: -10, coach: -4 },
   MID: {},
-  GOOD: { mental: 8, serious: 10 },
+  GOOD: { mental: 8, serious: 10, coach: 4 },
 };
 
 export const TALENT_STAT_MODS: Record<TalentId, Partial<PlayerStats>> = {
   UNKNOWN: {},
-  STAR_KID: { mental: -5 },
+  STAR_KID: { mental: -5, locker: -4 },
   LATE_BLOOMER: { micro: -6, macro: -6, teamfight: -6, lane: -6 },
-  ACADEMY: { macro: 5, teamfight: 5, serious: 5 },
+  ACADEMY: { macro: 5, teamfight: 5, serious: 5, coach: 4, locker: 4 },
 };
 
 export const TALENT_POPULARITY_MOD: Record<TalentId, number> = {
@@ -30,7 +30,7 @@ export const TALENT_POTENTIAL_MOD: Record<TalentId, number> = {
   ACADEMY: 0,
 };
 
-const STAT_KEYS: StatKey[] = ['micro', 'macro', 'teamfight', 'lane', 'mental', 'serious'];
+const STAT_KEYS: StatKey[] = ['micro', 'macro', 'teamfight', 'lane', 'mental', 'serious', 'coach', 'locker'];
 
 function clamp(n: number, lo = 0, hi = 100) {
   return Math.max(lo, Math.min(hi, n));

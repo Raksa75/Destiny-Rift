@@ -2,27 +2,37 @@
 
 @theme {
   --font-sans: "Inter", system-ui, "Segoe UI", Roboto, sans-serif;
-  --color-rift-bg: #0a0e17;
-  --color-rift-panel: #11172a;
-  --color-rift-panel-2: #161d35;
-  --color-rift-border: #26304d;
-  --color-rift-gold: #c8aa6e;
-  --color-rift-gold-bright: #f0e6d2;
-  --color-rift-blue: #0ac8b9;
-  --color-rift-blue-dark: #0397ab;
-  --color-rift-red: #e84057;
-  --color-rift-green: #4caf6f;
-  --color-rift-text: #a6b0c3;
-  --color-rift-text-bright: #f0f3f8;
+  --color-rift-bg: #142b18;
+  --color-rift-panel: #ffffff;
+  --color-rift-panel-2: #f2f4f0;
+  --color-rift-border: #e1e5dd;
+  --color-rift-gold: #d4a72c;
+  --color-rift-gold-bright: #16220f;
+  --color-rift-blue: #2f8fd1;
+  --color-rift-blue-dark: #1f6fae;
+  --color-rift-red: #a8431f;
+  --color-rift-green: #2f9e44;
+  --color-rift-text: #667062;
+  --color-rift-text-bright: #16220f;
+  --color-rift-onbg: #f3f8f0;
+  --color-rift-onbg-muted: #cfe1c9;
 }
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 body {
   margin: 0;
-  background: radial-gradient(circle at 50% 0%, #131b30 0%, #0a0e17 55%, #060811 100%);
+  background:
+    repeating-linear-gradient(
+      115deg,
+      rgba(255, 255, 255, 0.05) 0px,
+      rgba(255, 255, 255, 0.05) 40px,
+      rgba(0, 0, 0, 0.02) 40px,
+      rgba(0, 0, 0, 0.02) 80px
+    ),
+    linear-gradient(180deg, #5fa85a 0%, #3d7f45 45%, #2c6539 100%);
   color: var(--color-rift-text);
   min-height: 100svh;
   font-feature-settings: "tnum";
@@ -37,7 +47,7 @@ body {
   height: 8px;
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--color-rift-border);
+  background: rgba(255, 255, 255, 0.4);
   border-radius: 999px;
 }
 ::-webkit-scrollbar-track {

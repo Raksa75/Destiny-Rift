@@ -52,10 +52,10 @@ function MenuTile({
   return (
     <button
       onClick={onClick}
-      className={`w-full text-left rounded-xl border px-5 py-4 transition-colors ${
+      className={`w-full text-left rounded-xl border-2 px-5 py-4 transition-colors shadow-sm ${
         highlight
-          ? 'border-rift-blue bg-rift-blue/10 hover:bg-rift-blue/20'
-          : 'border-rift-border bg-rift-panel/80 hover:border-rift-text'
+          ? 'border-rift-blue bg-rift-panel hover:bg-rift-panel-2'
+          : 'border-rift-border bg-rift-panel/90 hover:border-rift-text'
       }`}
     >
       <div className={`font-semibold ${highlight ? 'text-rift-blue' : 'text-rift-text-bright'}`}>{title}</div>

@@ -19,7 +19,7 @@ export function WizardShell({ title, hint, children, onBack, step, totalSteps }:
         <div className="flex items-center justify-between mb-4">
           <button
             onClick={onBack}
-            className="text-sm text-rift-text hover:text-rift-text-bright transition-colors"
+            className="text-sm text-rift-onbg-muted hover:text-rift-onbg transition-colors"
           >
             ← {t('common.back')}
           </button>
@@ -33,7 +33,7 @@ export function WizardShell({ title, hint, children, onBack, step, totalSteps }:
           </div>
         </div>
         <h1 className="text-2xl font-semibold text-rift-gold-bright">{title}</h1>
-        {hint && <p className="text-sm text-rift-text mt-1">{hint}</p>}
+        {hint && <p className="text-sm text-rift-onbg-muted mt-1">{hint}</p>}
       </header>
 
       <div className="flex-1">{children}</div>

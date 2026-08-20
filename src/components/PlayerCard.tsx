@@ -7,7 +7,7 @@ import { StatBar } from './StatBar';
 import { PotentialStars } from './PotentialStars';
 
 const CORE_STATS_A: StatKey[] = ['micro', 'macro', 'teamfight', 'lane'];
-const CORE_STATS_B: StatKey[] = ['mental', 'serious'];
+const CORE_STATS_B: StatKey[] = ['mental', 'serious', 'coach', 'locker'];
 
 export function PlayerCard({ career }: { career: CareerRecord }) {
   const { t } = useI18n();

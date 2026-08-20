@@ -17,7 +17,7 @@ interface Props {
   totalSteps: number;
 }
 
-const STAT_KEYS: StatKey[] = ['micro', 'macro', 'teamfight', 'lane', 'mental', 'serious'];
+const STAT_KEYS: StatKey[] = ['micro', 'macro', 'teamfight', 'lane', 'mental', 'serious', 'coach', 'locker'];
 
 const TIER_COLOR: Record<ClubOffer['tier'], string> = {
   MAJOR: 'text-rift-gold-bright border-rift-gold/50',

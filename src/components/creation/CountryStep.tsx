@@ -23,7 +23,7 @@ export function CountryStep({ onNext, onBack, step, totalSteps }: Props) {
       <div className="flex flex-col gap-5">
         {REGIONS.map((region) => (
           <div key={region.id}>
-            <p className="text-xs uppercase tracking-wide text-rift-text mb-2">
+            <p className="text-xs uppercase tracking-wide font-semibold text-rift-onbg mb-2">
               {t(`region.${region.id}` as never)} · {region.league}
             </p>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">

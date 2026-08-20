@@ -48,6 +48,8 @@ const fr = {
   'stat.lane': 'Lane',
   'stat.mental': 'Mental',
   'stat.serious': 'Sérieux',
+  'stat.coach': 'Relation coach',
+  'stat.locker': 'Vestiaire',
 
   'diet.BAD': 'Mange n’importe quoi',
   'diet.BAD.desc': 'Fast-food et nuits courtes : impact négatif sur le mental et le sérieux.',

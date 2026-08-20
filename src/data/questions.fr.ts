@@ -5,9 +5,9 @@ const questions: Question[] = [
     id: 'extra_practice',
     text: 'Ton coach te propose une session supplémentaire de practice tool un soir de semaine.',
     options: [
-      { id: 'full', text: "Tu acceptes à fond", statDeltas: { micro: 4, mental: -2 }, formDelta: -8, moraleDelta: -2 },
+      { id: 'full', text: "Tu acceptes à fond", statDeltas: { micro: 4, mental: -2, coach: 3 }, formDelta: -8, moraleDelta: -2 },
       { id: 'light', text: 'Tu fais un peu, sans forcer', statDeltas: { micro: 1 }, formDelta: -2 },
-      { id: 'refuse', text: 'Tu refuses pour te reposer', statDeltas: { mental: 2, serious: -2 }, formDelta: 5, moraleDelta: 2 },
+      { id: 'refuse', text: 'Tu refuses pour te reposer', statDeltas: { mental: 2, serious: -2, coach: -2 }, formDelta: 5, moraleDelta: 2 },
     ],
   },
   {
@@ -23,9 +23,9 @@ const questions: Question[] = [
     id: 'scrim_loss',
     text: 'Après une défaite difficile en scrim, ton équipe est démoralisée.',
     options: [
-      { id: 'motivate', text: 'Tu motives le groupe', statDeltas: { mental: 3, teamfight: 2 }, formDelta: -1, moraleDelta: 4 },
+      { id: 'motivate', text: 'Tu motives le groupe', statDeltas: { mental: 3, teamfight: 2, locker: 4 }, formDelta: -1, moraleDelta: 4 },
       { id: 'silent', text: 'Tu restes silencieux, concentré sur toi', statDeltas: { micro: 1 } },
-      { id: 'blame', text: 'Tu rejettes la faute sur un coéquipier', statDeltas: { mental: -3 }, popularityDelta: -2, moraleDelta: -5 },
+      { id: 'blame', text: 'Tu rejettes la faute sur un coéquipier', statDeltas: { mental: -3, locker: -6 }, popularityDelta: -2, moraleDelta: -5 },
     ],
   },
   {
@@ -68,18 +68,18 @@ const questions: Question[] = [
     id: 'public_criticism',
     text: 'Un coéquipier te critique publiquement sur les réseaux.',
     options: [
-      { id: 'calm', text: 'Tu réponds calmement en privé', statDeltas: { mental: 2, serious: 2 }, moraleDelta: 2 },
+      { id: 'calm', text: 'Tu réponds calmement en privé', statDeltas: { mental: 2, serious: 2, locker: 3 }, moraleDelta: 2 },
       { id: 'ignore', text: 'Tu ignores complètement', statDeltas: {}, moraleDelta: -1 },
-      { id: 'clash', text: 'Tu clashes en public', statDeltas: { mental: -2 }, popularityDelta: -4, formDelta: -1, moraleDelta: -5 },
+      { id: 'clash', text: 'Tu clashes en public', statDeltas: { mental: -2, locker: -5 }, popularityDelta: -4, formDelta: -1, moraleDelta: -5 },
     ],
   },
   {
     id: 'macro_bootcamp',
     text: 'Ton club te propose un stage macro avec un ancien pro.',
     options: [
-      { id: 'full', text: 'Tu y vas à fond', statDeltas: { macro: 4 }, moneyDelta: -50, formDelta: -4, moraleDelta: 1 },
+      { id: 'full', text: 'Tu y vas à fond', statDeltas: { macro: 4, coach: 4 }, moneyDelta: -50, formDelta: -4, moraleDelta: 1 },
       { id: 'light', text: 'Tu y vas sans trop investir', statDeltas: { macro: 1 }, formDelta: -1 },
-      { id: 'solo', text: 'Tu préfères pratiquer en solo', statDeltas: { micro: 2 }, formDelta: -2 },
+      { id: 'solo', text: 'Tu préfères pratiquer en solo', statDeltas: { micro: 2, coach: -3 }, formDelta: -2 },
     ],
   },
   {
@@ -96,17 +96,17 @@ const questions: Question[] = [
     text: 'Un patch majeur change complètement ton rôle.',
     options: [
       { id: 'theorycraft', text: 'Tu passes des heures à théorycrafter', statDeltas: { macro: 3, mental: -1 }, formDelta: -4, moraleDelta: -1 },
-      { id: 'adapt', text: "Tu t'adaptes progressivement", statDeltas: { lane: 2 }, formDelta: -1, moraleDelta: 1 },
-      { id: 'refuse', text: 'Tu rages et refuses de changer tes habitudes', statDeltas: { mental: -3, lane: -2 }, moraleDelta: -3 },
+      { id: 'adapt', text: "Tu t'adaptes progressivement", statDeltas: { lane: 2, coach: 3 }, formDelta: -1, moraleDelta: 1 },
+      { id: 'refuse', text: 'Tu rages et refuses de changer tes habitudes', statDeltas: { mental: -3, lane: -2, coach: -4 }, moraleDelta: -3 },
     ],
   },
   {
     id: 'series_loss',
     text: "Ton équipe perd une série importante, l'ambiance est tendue.",
     options: [
-      { id: 'debrief', text: 'Tu proposes un debrief calme avec le groupe', statDeltas: { teamfight: 3, mental: 1 }, formDelta: -1, moraleDelta: 3 },
-      { id: 'coach', text: 'Tu laisses le coach gérer', statDeltas: {} },
-      { id: 'isolate', text: 'Tu t’isoles et coupes la communication', statDeltas: { teamfight: -3, mental: -1 }, formDelta: -1, moraleDelta: -4 },
+      { id: 'debrief', text: 'Tu proposes un debrief calme avec le groupe', statDeltas: { teamfight: 3, mental: 1, locker: 3 }, formDelta: -1, moraleDelta: 3 },
+      { id: 'coach', text: 'Tu laisses le coach gérer', statDeltas: { coach: 4 } },
+      { id: 'isolate', text: 'Tu t’isoles et coupes la communication', statDeltas: { teamfight: -3, mental: -1, locker: -4 }, formDelta: -1, moraleDelta: -4 },
     ],
   },
   {

@@ -50,6 +50,8 @@ const en: Dict = {
   'stat.lane': 'Lane',
   'stat.mental': 'Mental',
   'stat.serious': 'Discipline',
+  'stat.coach': 'Coach relation',
+  'stat.locker': 'Locker room',
 
   'diet.BAD': 'Eats whatever',
   'diet.BAD.desc': 'Fast food and short nights: hurts mental and discipline.',

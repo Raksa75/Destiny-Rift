@@ -19,7 +19,7 @@ export function MyPlayers({ careers, onBack, onCreate, onSelect }: Props) {
         <h1 className="text-xl font-semibold text-rift-gold-bright">{t('players.title')}</h1>
         <button
           onClick={onBack}
-          className="text-sm text-rift-text hover:text-rift-text-bright transition-colors"
+          className="text-sm text-rift-onbg-muted hover:text-rift-onbg transition-colors"
         >
           {t('common.menu')}
         </button>
