@@ -174,6 +174,34 @@ const en: Dict = {
   'season.poach.accept': 'Join {club}',
   'season.poach.decline': 'Stay at {current}',
   'season.poach.decline.log': 'Declined {club}’s offer, staying at {current}.',
+
+  'intl.event.FIRST_STAND': 'First Stand',
+  'intl.event.MSI': 'MSI',
+  'intl.event.WORLDS': 'Worlds',
+
+  'intl.qualified.title': 'Qualified for the international stage!',
+  'intl.qualified.text': '{club} finishes on top and earns its spot at {event}!',
+
+  'intl.round.GROUP': 'Group stage ({n}/3)',
+  'intl.round.SEMI': 'Semifinal',
+  'intl.round.FINAL': 'Final',
+  'intl.simulate': 'Simulate the match',
+  'intl.result.win': 'Victory!',
+  'intl.result.loss': 'Defeat.',
+
+  'intl.placement.GROUP_STAGE': 'Group stage exit',
+  'intl.placement.SEMIFINALIST': 'Semifinalist',
+  'intl.placement.RUNNER_UP': 'Runner-up',
+  'intl.placement.CHAMPION': 'Champion!',
+
+  'intl.title': '{event} {year} Champion',
+  'intl.award.RUNNER_UP': '{event} {year} Runner-up',
+  'intl.award.SEMIFINALIST': '{event} {year} Semifinalist',
+
+  'intl.log.CHAMPION': 'Crowned champion of {event}!',
+  'intl.log.RUNNER_UP': 'Runner-up at {event}.',
+  'intl.log.SEMIFINALIST': 'Eliminated in the {event} semifinal.',
+  'intl.log.GROUP_STAGE': 'Eliminated in the {event} group stage.',
 };
 
 export default en;

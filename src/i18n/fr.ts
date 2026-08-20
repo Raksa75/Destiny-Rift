@@ -172,6 +172,34 @@ const fr = {
   'season.poach.accept': 'Rejoindre {club}',
   'season.poach.decline': 'Rester à {current}',
   'season.poach.decline.log': 'Offre de {club} déclinée, tu restes à {current}.',
+
+  'intl.event.FIRST_STAND': 'First Stand',
+  'intl.event.MSI': 'MSI',
+  'intl.event.WORLDS': 'Worlds',
+
+  'intl.qualified.title': 'Qualifié·e pour la scène internationale !',
+  'intl.qualified.text': '{club} termine en tête et décroche sa place pour {event} !',
+
+  'intl.round.GROUP': 'Phase de groupes ({n}/3)',
+  'intl.round.SEMI': 'Demi-finale',
+  'intl.round.FINAL': 'Finale',
+  'intl.simulate': 'Simuler le match',
+  'intl.result.win': 'Victoire !',
+  'intl.result.loss': 'Défaite.',
+
+  'intl.placement.GROUP_STAGE': 'Sortie en phase de groupes',
+  'intl.placement.SEMIFINALIST': 'Demi-finaliste',
+  'intl.placement.RUNNER_UP': 'Finaliste',
+  'intl.placement.CHAMPION': 'Champion·ne !',
+
+  'intl.title': 'Champion {event} {year}',
+  'intl.award.RUNNER_UP': 'Finaliste {event} {year}',
+  'intl.award.SEMIFINALIST': 'Demi-finaliste {event} {year}',
+
+  'intl.log.CHAMPION': 'Sacré·e champion·ne de {event} !',
+  'intl.log.RUNNER_UP': 'Finaliste de {event}.',
+  'intl.log.SEMIFINALIST': 'Éliminé·e en demi-finale de {event}.',
+  'intl.log.GROUP_STAGE': 'Éliminé·e en phase de groupes de {event}.',
 } as const;
 
 export type Dict = Record<keyof typeof fr, string>;

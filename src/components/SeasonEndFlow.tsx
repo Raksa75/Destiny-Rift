@@ -1,16 +1,25 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useI18n } from '../i18n';
 import { overallRating } from '../data/creation';
 import { generateTransferOffers } from '../data/clubs';
 import { contractLengthYears } from '../data/salary';
 import { pickFinalMatch } from '../data/matches';
 import { canAttemptPromotion, promotedTier, resolveContractRenewal, resolvePromotionMatch } from '../data/season';
+import { internationalEventForSeason, internationalReward, qualifiesForInternational } from '../data/international';
+import type { InternationalEventId, InternationalPlacement } from '../data/international';
 import type { MatchOption, MatchQuestion } from '../data/matchTypes';
 import type { CareerLogEntry, CareerRecord, ClubOffer, SeasonPlacement } from '../types';
 import { MatchCard } from './MatchCard';
+import { InternationalBracket } from './InternationalBracket';
+
+function clamp(n: number, lo = 0, hi = 100) {
+  return Math.max(lo, Math.min(hi, n));
+}
 
 type Step =
   | { kind: 'summary' }
+  | { kind: 'internationalIntro'; event: InternationalEventId }
+  | { kind: 'internationalBracket'; event: InternationalEventId }
   | { kind: 'promotion'; match: MatchQuestion }
   | { kind: 'promotionResult'; promoted: boolean; tier?: string }
   | { kind: 'contractRenewed'; year: number }
@@ -28,17 +37,39 @@ export function SeasonEndFlow({ career, placement, onFinish }: Props) {
   const [step, setStep] = useState<Step>({ kind: 'summary' });
   const [club, setClub] = useState<ClubOffer>(career.club);
   const [contractUntilYear, setContractUntilYear] = useState(career.contractUntilYear);
-  const [logAdds, setLogAdds] = useState<CareerLogEntry[]>([]);
+  // Refs, not state: some handlers (e.g. the international bracket's onDone) write these
+  // and then immediately call finishWith in the same synchronous call, before a re-render
+  // would land a useState update. Refs read back their own writes immediately.
+  const logAdds = useRef<CareerLogEntry[]>([]);
+  const bonusMoney = useRef(0);
+  const bonusPopularity = useRef(0);
+  const bonusTitles = useRef<string[]>([]);
+  const bonusAwards = useRef<string[]>([]);
 
   const addLog = (text: string) => {
-    setLogAdds((l) => [...l, { age: career.age, month: career.month, text }]);
+    logAdds.current = [...logAdds.current, { age: career.age, month: career.month, text }];
   };
 
   const finishWith = (patchClub: ClubOffer, patchContractUntilYear: number, extraLog: CareerLogEntry[] = []) => {
-    onFinish({ club: patchClub, contractUntilYear: patchContractUntilYear }, [...logAdds, ...extraLog]);
+    onFinish(
+      {
+        club: patchClub,
+        contractUntilYear: patchContractUntilYear,
+        money: career.money + bonusMoney.current,
+        careerEarnings: career.careerEarnings + Math.max(0, bonusMoney.current),
+        popularity: clamp(career.popularity + bonusPopularity.current),
+        titles: bonusTitles.current.length ? [...career.titles, ...bonusTitles.current] : career.titles,
+        awards: bonusAwards.current.length ? [...career.awards, ...bonusAwards.current] : career.awards,
+      },
+      [...logAdds.current, ...extraLog],
+    );
   };
 
   const proceedAfterSummary = () => {
+    if (qualifiesForInternational(club.tier, placement)) {
+      setStep({ kind: 'internationalIntro', event: internationalEventForSeason(career.seasonsPlayed) });
+      return;
+    }
     if (canAttemptPromotion(club.tier, placement)) {
       setStep({ kind: 'promotion', match: pickFinalMatch(lang) });
       return;
@@ -91,6 +122,53 @@ export function SeasonEndFlow({ career, placement, onFinish }: Props) {
           {t('season.continue')}
         </button>
       </div>
+    );
+  }
+
+  if (step.kind === 'internationalIntro') {
+    return (
+      <div className="rounded-2xl border border-rift-gold/50 bg-rift-panel/90 p-6 text-center flex flex-col items-center gap-4">
+        <p className="text-rift-blue text-xs tracking-[0.3em] uppercase">{t(`intl.event.${step.event}` as never)}</p>
+        <p className="text-rift-text-bright font-semibold text-lg">{t('intl.qualified.title')}</p>
+        <p className="text-rift-text">
+          {t('intl.qualified.text', { club: club.name, event: t(`intl.event.${step.event}` as never) })}
+        </p>
+        <button
+          onClick={() => setStep({ kind: 'internationalBracket', event: step.event })}
+          className="rounded-lg bg-rift-blue hover:bg-rift-blue-dark text-rift-bg font-semibold px-6 py-2.5 transition-colors"
+        >
+          {t('season.continue')}
+        </button>
+      </div>
+    );
+  }
+
+  if (step.kind === 'internationalBracket') {
+    return (
+      <InternationalBracket
+        event={step.event}
+        ourName={club.name}
+        stats={career.stats}
+        onDone={(finalPlacement: InternationalPlacement, reward: ReturnType<typeof internationalReward>) => {
+          bonusMoney.current += reward.money;
+          bonusPopularity.current += reward.popularity;
+          const eventLabel = t(`intl.event.${step.event}` as never);
+          if (reward.grantsTitle) {
+            bonusTitles.current = [
+              ...bonusTitles.current,
+              t('intl.title', { event: eventLabel, year: String(career.year) }),
+            ];
+          }
+          if (reward.grantsAward) {
+            bonusAwards.current = [
+              ...bonusAwards.current,
+              t(`intl.award.${finalPlacement}` as never, { event: eventLabel, year: String(career.year) }),
+            ];
+          }
+          addLog(t(`intl.log.${finalPlacement}` as never, { event: eventLabel }));
+          proceedToContract();
+        }}
+      />
     );
   }
 

@@ -1,7 +1,7 @@
 import { TIER_ORDER } from '../types';
 import type { ClubOffer, ClubTier, RegionId, SeasonPlacement } from '../types';
 
-const CLUB_NAME_POOL = [
+export const CLUB_NAME_POOL = [
   'Voidling Esports',
   'Nexus Storm',
   'Obsidian Wolves',
