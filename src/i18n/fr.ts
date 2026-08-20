@@ -107,6 +107,8 @@ const fr = {
   'play.stats': 'Statistiques',
   'play.journal': 'Journal',
   'play.salary.log': '+{amount}€ de salaire versé par {club}.',
+  'play.season': 'Saison {n}',
+  'play.season.end': 'Fin de la saison {n}.',
 
   'card.reputation': 'Réputation',
   'card.contract': '{salary} k€/an jusqu’en {year}',

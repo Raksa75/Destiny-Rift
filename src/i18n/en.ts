@@ -109,6 +109,8 @@ const en: Dict = {
   'play.stats': 'Stats',
   'play.journal': 'Journal',
   'play.salary.log': '+{amount}€ salary paid by {club}.',
+  'play.season': 'Season {n}',
+  'play.season.end': 'End of season {n}.',
 
   'card.reputation': 'Reputation',
   'card.contract': '{salary}k€/yr until {year}',

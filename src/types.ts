@@ -63,9 +63,12 @@ export interface CareerRecord {
   selections: number;
   titles: string[];
   awards: string[];
+  turnCount: number; // total questions answered since career start
+  seasonsPlayed: number;
   log: CareerLogEntry[];
   createdAt: string;
 }
 
 export const START_AGE = 14;
+export const SEASON_LENGTH_MONTHS = 4;
 

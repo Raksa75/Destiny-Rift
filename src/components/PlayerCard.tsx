@@ -120,7 +120,7 @@ export function PlayerCard({ career }: { career: CareerRecord }) {
         <h2 className="text-sm uppercase tracking-wide text-rift-text mb-2">{t('card.trajectory')}</h2>
         <p className="text-sm text-rift-text italic mb-2">{t('card.trajectoryHint')}</p>
         <div className="flex flex-col gap-1.5 text-sm">
-          <StatRow label={t('card.seasonsPlayed')} value={0} />
+          <StatRow label={t('card.seasonsPlayed')} value={career.seasonsPlayed} />
           <div className="flex items-center justify-between">
             <span className="text-rift-text">{t('card.trainingClub')}</span>
             <span className="text-rift-text-bright font-medium">{career.firstClub.name}</span>

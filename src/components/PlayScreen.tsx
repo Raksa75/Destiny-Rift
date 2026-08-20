@@ -4,6 +4,7 @@ import { pickQuestion } from '../data/questions';
 import { monthlySalary } from '../data/salary';
 import { overallRating } from '../data/creation';
 import type { QuestionOption } from '../data/questionTypes';
+import { SEASON_LENGTH_MONTHS } from '../types';
 import type { CareerRecord, StatKey } from '../types';
 import { PlayerCard } from './PlayerCard';
 
@@ -49,7 +50,14 @@ export function PlayScreen({ career, onUpdate, onBack }: Props) {
     const morale = clamp(career.morale + (option.moraleDelta ?? 0));
     const peakOverall = Math.max(career.peakOverall, Math.round(overallRating(stats)));
 
+    const turnCount = career.turnCount + 1;
+    const seasonsPlayed = Math.floor(turnCount / SEASON_LENGTH_MONTHS);
+    const seasonJustEnded = seasonsPlayed > career.seasonsPlayed;
+
     const log = [
+      ...(seasonJustEnded
+        ? [{ age: career.age, month: career.month, text: t('play.season.end', { n: String(seasonsPlayed) }) }]
+        : []),
       { age: career.age, month: career.month, text: option.text },
       { age: career.age, month: career.month, text: t('play.salary.log', { amount: String(salary), club: career.club.name }) },
       ...career.log,
@@ -71,13 +79,20 @@ export function PlayScreen({ career, onUpdate, onBack }: Props) {
       age,
       month,
       year,
+      turnCount,
+      seasonsPlayed,
       log,
     });
   };
 
+  const monthInSeason = ((career.turnCount % SEASON_LENGTH_MONTHS) + 1);
+
   return (
     <div className="min-h-svh px-4 py-6 pb-20 max-w-3xl mx-auto flex flex-col gap-6">
-      <div className="flex justify-end mt-12">
+      <div className="flex items-center justify-between mt-12">
+        <span className="text-sm text-rift-blue font-medium">
+          {t('play.season', { n: String(career.seasonsPlayed + 1) })} · {monthInSeason}/{SEASON_LENGTH_MONTHS}
+        </span>
         <button onClick={onBack} className="text-sm text-rift-text hover:text-rift-text-bright transition-colors">
           {t('common.menu')}
         </button>
