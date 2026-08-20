@@ -1,12 +1,17 @@
 import { useState } from 'react';
 import { useI18n } from '../i18n';
 import { pickQuestion } from '../data/questions';
+import { pickRegularMatch, resolveMatch } from '../data/matches';
 import { monthlySalary } from '../data/salary';
 import { overallRating } from '../data/creation';
+import { computeSeasonPlacement } from '../data/season';
 import type { QuestionOption } from '../data/questionTypes';
+import type { MatchOption, MatchQuestion } from '../data/matchTypes';
 import { SEASON_LENGTH_MONTHS } from '../types';
-import type { CareerRecord, StatKey } from '../types';
+import type { CareerLogEntry, CareerRecord, SeasonPlacement, StatKey } from '../types';
 import { PlayerCard } from './PlayerCard';
+import { MatchCard } from './MatchCard';
+import { SeasonEndFlow } from './SeasonEndFlow';
 
 interface Props {
   career: CareerRecord;
@@ -20,18 +25,35 @@ function clamp(n: number, lo = 0, hi = 100) {
   return Math.max(lo, Math.min(hi, n));
 }
 
+type Turn = { kind: 'question' } | { kind: 'match'; match: MatchQuestion; isFinal: boolean };
+
+function rollTurn(career: CareerRecord, lang: 'fr' | 'en'): Turn {
+  const monthInSeason = (career.turnCount % SEASON_LENGTH_MONTHS) + 1;
+  if (monthInSeason === SEASON_LENGTH_MONTHS) {
+    return { kind: 'match', match: pickRegularMatch(lang), isFinal: true };
+  }
+  if (Math.random() < 0.45) {
+    return { kind: 'match', match: pickRegularMatch(lang), isFinal: false };
+  }
+  return { kind: 'question' };
+}
+
 export function PlayScreen({ career, onUpdate, onBack }: Props) {
   const { t, lang } = useI18n();
   const [recentIds, setRecentIds] = useState<string[]>([]);
   const [question, setQuestion] = useState(() => pickQuestion(lang, []));
+  const [turn, setTurn] = useState<Turn>(() => rollTurn(career, lang));
+  const [seasonPlacement, setSeasonPlacement] = useState<SeasonPlacement | null>(null);
 
-  const handleAnswer = (option: QuestionOption) => {
-    const stats = { ...career.stats };
-    for (const key of STAT_KEYS) {
-      const delta = option.statDeltas[key];
-      if (delta) stats[key] = clamp(stats[key] + delta);
-    }
-
+  const advanceTurn = (params: {
+    stats: CareerRecord['stats'];
+    moneyDelta: number;
+    popularityDelta: number;
+    formDelta: number;
+    moraleDelta: number;
+    entryTexts: string[];
+    matchOutcome?: boolean;
+  }) => {
     let month = career.month + 1;
     let age = career.age;
     let year = career.year;
@@ -42,34 +64,46 @@ export function PlayScreen({ career, onUpdate, onBack }: Props) {
     }
 
     const salary = monthlySalary(career.club.tier, career.region);
-    const moneyGain = (option.moneyDelta ?? 0) + salary;
+    const moneyGain = params.moneyDelta + salary;
     const money = career.money + moneyGain;
     const careerEarnings = career.careerEarnings + Math.max(0, moneyGain);
-    const popularity = clamp(career.popularity + (option.popularityDelta ?? 0));
-    const form = clamp(career.form + (option.formDelta ?? 0));
-    const morale = clamp(career.morale + (option.moraleDelta ?? 0));
-    const peakOverall = Math.max(career.peakOverall, Math.round(overallRating(stats)));
+    const popularity = clamp(career.popularity + params.popularityDelta);
+    const form = clamp(career.form + params.formDelta);
+    const morale = clamp(career.morale + params.moraleDelta);
+    const peakOverall = Math.max(career.peakOverall, Math.round(overallRating(params.stats)));
 
     const turnCount = career.turnCount + 1;
     const seasonsPlayed = Math.floor(turnCount / SEASON_LENGTH_MONTHS);
     const seasonJustEnded = seasonsPlayed > career.seasonsPlayed;
 
-    const log = [
-      ...(seasonJustEnded
-        ? [{ age: career.age, month: career.month, text: t('play.season.end', { n: String(seasonsPlayed) }) }]
-        : []),
-      { age: career.age, month: career.month, text: option.text },
-      { age: career.age, month: career.month, text: t('play.salary.log', { amount: String(salary), club: career.club.name }) },
-      ...career.log,
-    ].slice(0, 30);
+    let matchesPlayed = career.matchesPlayed;
+    let wins = career.wins;
+    let mvpCount = career.mvpCount;
+    let seasonWins = career.seasonWins;
+    let seasonLosses = career.seasonLosses;
+    if (params.matchOutcome !== undefined) {
+      matchesPlayed += 1;
+      if (params.matchOutcome) {
+        wins += 1;
+        seasonWins += 1;
+        if (Math.random() < 0.12) {
+          mvpCount += 1;
+          params.entryTexts.push(t('match.mvp.log'));
+        }
+      } else {
+        seasonLosses += 1;
+      }
+    }
 
-    const nextRecentIds = [question.id, ...recentIds].slice(0, 4);
-    setRecentIds(nextRecentIds);
-    setQuestion(pickQuestion(lang, nextRecentIds));
+    const newEntries: CareerLogEntry[] = params.entryTexts
+      .filter(Boolean)
+      .map((text) => ({ age: career.age, month: career.month, text }));
 
-    onUpdate({
+    const log = [...newEntries.reverse(), ...career.log].slice(0, 30);
+
+    const updated: CareerRecord = {
       ...career,
-      stats,
+      stats: params.stats,
       money,
       careerEarnings,
       popularity,
@@ -81,11 +115,67 @@ export function PlayScreen({ career, onUpdate, onBack }: Props) {
       year,
       turnCount,
       seasonsPlayed,
+      matchesPlayed,
+      wins,
+      mvpCount,
+      seasonWins,
+      seasonLosses,
       log,
+    };
+
+    onUpdate(updated);
+
+    if (seasonJustEnded) {
+      setSeasonPlacement(computeSeasonPlacement(seasonWins, seasonLosses));
+    } else {
+      setTurn(rollTurn(updated, lang));
+    }
+  };
+
+  const handleQuestionAnswer = (option: QuestionOption) => {
+    const stats = { ...career.stats };
+    for (const key of STAT_KEYS) {
+      const delta = option.statDeltas[key];
+      if (delta) stats[key] = clamp(stats[key] + delta);
+    }
+    const salary = monthlySalary(career.club.tier, career.region);
+
+    const nextRecentIds = [question.id, ...recentIds].slice(0, 4);
+    setRecentIds(nextRecentIds);
+    setQuestion(pickQuestion(lang, nextRecentIds));
+
+    advanceTurn({
+      stats,
+      moneyDelta: option.moneyDelta ?? 0,
+      popularityDelta: option.popularityDelta ?? 0,
+      formDelta: option.formDelta ?? 0,
+      moraleDelta: option.moraleDelta ?? 0,
+      entryTexts: [option.text, t('play.salary.log', { amount: String(salary), club: career.club.name })],
     });
   };
 
-  const monthInSeason = ((career.turnCount % SEASON_LENGTH_MONTHS) + 1);
+  const handleMatchAnswer = (option: MatchOption, won: boolean, isFinal: boolean) => {
+    const salary = monthlySalary(career.club.tier, career.region);
+    const resultText = t(won ? 'match.win.log' : 'match.loss.log', { text: option.text });
+    const seasonsPlayedAfter = Math.floor((career.turnCount + 1) / SEASON_LENGTH_MONTHS);
+    const seasonEndText = isFinal ? t('play.season.end', { n: String(seasonsPlayedAfter) }) : '';
+
+    advanceTurn({
+      stats: career.stats,
+      moneyDelta: won ? 100 : 0,
+      popularityDelta: won ? 2 : -1,
+      formDelta: -3,
+      moraleDelta: won ? 3 : -3,
+      entryTexts: [
+        seasonEndText,
+        resultText,
+        t('play.salary.log', { amount: String(salary), club: career.club.name }),
+      ],
+      matchOutcome: won,
+    });
+  };
+
+  const monthInSeason = (career.turnCount % SEASON_LENGTH_MONTHS) + 1;
 
   return (
     <div className="min-h-svh px-4 py-6 pb-20 max-w-3xl mx-auto flex flex-col gap-6">
@@ -100,20 +190,46 @@ export function PlayScreen({ career, onUpdate, onBack }: Props) {
 
       <PlayerCard career={career} />
 
-      <section className="rounded-2xl border border-rift-blue/40 bg-rift-panel/80 p-5">
-        <p className="text-rift-text-bright font-medium mb-4">{question.text}</p>
-        <div className="flex flex-col gap-2.5">
-          {question.options.map((option) => (
-            <button
-              key={option.id}
-              onClick={() => handleAnswer(option)}
-              className="text-left rounded-lg border border-rift-border bg-rift-panel-2 hover:border-rift-blue px-4 py-3 text-sm text-rift-text-bright transition-colors"
-            >
-              {option.text}
-            </button>
-          ))}
-        </div>
-      </section>
+      {seasonPlacement ? (
+        <SeasonEndFlow
+          career={career}
+          placement={seasonPlacement}
+          onFinish={(patch, extraLogs) => {
+            const merged: CareerRecord = {
+              ...career,
+              ...patch,
+              seasonWins: 0,
+              seasonLosses: 0,
+              log: [...[...extraLogs].reverse(), ...career.log].slice(0, 30),
+            };
+            onUpdate(merged);
+            setSeasonPlacement(null);
+            setTurn(rollTurn(merged, lang));
+          }}
+        />
+      ) : turn.kind === 'match' ? (
+        <MatchCard
+          match={turn.match}
+          badge={t(turn.isFinal ? 'match.badge.final' : 'match.badge.regular')}
+          resolveWin={(option) => resolveMatch(option, career.stats)}
+          onResult={(option, won) => handleMatchAnswer(option, won, turn.isFinal)}
+        />
+      ) : (
+        <section className="rounded-2xl border border-rift-blue/40 bg-rift-panel/80 p-5">
+          <p className="text-rift-text-bright font-medium mb-4">{question.text}</p>
+          <div className="flex flex-col gap-2.5">
+            {question.options.map((option) => (
+              <button
+                key={option.id}
+                onClick={() => handleQuestionAnswer(option)}
+                className="text-left rounded-lg border border-rift-border bg-rift-panel-2 hover:border-rift-blue px-4 py-3 text-sm text-rift-text-bright transition-colors"
+              >
+                {option.text}
+              </button>
+            ))}
+          </div>
+        </section>
+      )}
 
       <section className="rounded-2xl border border-rift-border bg-rift-panel/80 p-5">
         <h2 className="text-sm uppercase tracking-wide text-rift-text mb-3">{t('play.journal')}</h2>

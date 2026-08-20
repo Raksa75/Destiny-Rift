@@ -65,10 +65,16 @@ export interface CareerRecord {
   awards: string[];
   turnCount: number; // total questions answered since career start
   seasonsPlayed: number;
+  seasonWins: number;
+  seasonLosses: number;
   log: CareerLogEntry[];
   createdAt: string;
 }
 
 export const START_AGE = 14;
 export const SEASON_LENGTH_MONTHS = 4;
+
+export const TIER_ORDER: ClubTier[] = ['DIV4', 'DIV3', 'DIV2', 'MAJOR'];
+
+export type SeasonPlacement = 'TOP' | 'MID' | 'BOTTOM';
 

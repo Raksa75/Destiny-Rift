@@ -180,6 +180,8 @@ export function CreationWizard({ onCancel, onComplete, onDone }: Props) {
             awards: [],
             turnCount: 0,
             seasonsPlayed: 0,
+            seasonWins: 0,
+            seasonLosses: 0,
             log: [],
             createdAt: new Date().toISOString(),
           };

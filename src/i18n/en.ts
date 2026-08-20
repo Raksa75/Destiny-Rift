@@ -134,6 +134,46 @@ const en: Dict = {
   'card.peakOvr': 'Peak OVR',
   'card.careerEarnings': 'Career earnings',
   'card.fortune': 'Fortune',
+
+  'match.badge.regular': 'Season match',
+  'match.badge.final': 'Season final',
+  'match.badge.promotion': 'Promotion match',
+  'match.win.log': 'Victory! {text}',
+  'match.loss.log': 'Defeat. {text}',
+  'match.mvp.log': 'Named match MVP!',
+
+  'season.summary.title': 'End of season {n}',
+  'season.summary.record': 'Record: {wins}W - {losses}L',
+  'season.placement.TOP': 'You finish at the top of the league.',
+  'season.placement.MID': 'You finish mid-table.',
+  'season.placement.BOTTOM': 'You finish at the bottom of the table.',
+  'season.continue': 'Continue',
+
+  'season.promotion.intro': 'Your team finishes on top and faces the 9th of the division above for promotion!',
+  'season.promotion.win.title': 'Promotion secured!',
+  'season.promotion.win.text': '{club} moves up to {tier}!',
+  'season.promotion.loss.title': 'Promotion missed',
+  'season.promotion.loss.text': 'Promotion slips away this time. Try again next season.',
+  'season.promotion.log.win': 'Promotion! {club} moves up to {tier}.',
+  'season.promotion.log.loss': 'Lost the promotion match, no promotion this season.',
+
+  'season.contract.renewed.title': 'Contract extended',
+  'season.contract.renewed.text': '{club} extends your contract until {year}.',
+  'season.contract.renewed.log': 'Contract extended with {club} until {year}.',
+  'season.contract.notRenewed.title': 'Contract ended',
+  'season.contract.notRenewed.text': '{club} doesn’t extend your contract. Time to find a new team.',
+  'season.contract.notRenewed.log': '{club} does not renew the contract.',
+
+  'season.transfer.title': 'Transfer offers',
+  'season.transfer.hint': 'Choose your next club.',
+  'season.transfer.sign': 'Sign',
+  'season.transfer.log': 'Transfer: {name} joins {club} ({tier}) until {year}.',
+
+  'season.poach.title': 'A club is courting you',
+  'season.poach.text': '{club} offers to sign you right now, despite your ongoing contract with {current}.',
+  'season.poach.accept': 'Join {club}',
+  'season.poach.decline': 'Stay at {current}',
+  'season.poach.decline.log': 'Declined {club}’s offer, staying at {current}.',
 };
 
 export default en;

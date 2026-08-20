@@ -132,6 +132,46 @@ const fr = {
   'card.peakOvr': 'OVR max',
   'card.careerEarnings': 'Gains de carrière',
   'card.fortune': 'Fortune',
+
+  'match.badge.regular': 'Match de la saison',
+  'match.badge.final': 'Finale de saison',
+  'match.badge.promotion': 'Match de promotion',
+  'match.win.log': 'Victoire ! {text}',
+  'match.loss.log': 'Défaite. {text}',
+  'match.mvp.log': 'Élu·e MVP du match !',
+
+  'season.summary.title': 'Fin de la saison {n}',
+  'season.summary.record': 'Bilan : {wins}V - {losses}D',
+  'season.placement.TOP': 'Vous terminez en tête de la ligue.',
+  'season.placement.MID': 'Vous terminez en milieu de tableau.',
+  'season.placement.BOTTOM': 'Vous terminez en bas de tableau.',
+  'season.continue': 'Continuer',
+
+  'season.promotion.intro': 'Votre équipe termine en tête et affronte le 9e de la division supérieure pour la montée !',
+  'season.promotion.win.title': 'Promotion obtenue !',
+  'season.promotion.win.text': '{club} monte en {tier} !',
+  'season.promotion.loss.title': 'Promotion manquée',
+  'season.promotion.loss.text': 'La montée vous échappe cette fois. Retentez votre chance la saison prochaine.',
+  'season.promotion.log.win': 'Promotion ! {club} monte en {tier}.',
+  'season.promotion.log.loss': 'Match de promotion perdu, pas de montée cette saison.',
+
+  'season.contract.renewed.title': 'Contrat prolongé',
+  'season.contract.renewed.text': '{club} prolonge ton contrat jusqu’en {year}.',
+  'season.contract.renewed.log': 'Contrat prolongé avec {club} jusqu’en {year}.',
+  'season.contract.notRenewed.title': 'Fin de contrat',
+  'season.contract.notRenewed.text': '{club} ne prolonge pas ton contrat. Il est temps de trouver une nouvelle équipe.',
+  'season.contract.notRenewed.log': '{club} ne renouvelle pas le contrat.',
+
+  'season.transfer.title': 'Offres de transfert',
+  'season.transfer.hint': 'Choisis ton prochain club.',
+  'season.transfer.sign': 'Signer',
+  'season.transfer.log': 'Transfert : {name} rejoint {club} ({tier}) jusqu’en {year}.',
+
+  'season.poach.title': 'Un club te courtise',
+  'season.poach.text': '{club} propose de te faire signer dès maintenant, malgré ton contrat en cours avec {current}.',
+  'season.poach.accept': 'Rejoindre {club}',
+  'season.poach.decline': 'Rester à {current}',
+  'season.poach.decline.log': 'Offre de {club} déclinée, tu restes à {current}.',
 } as const;
 
 export type Dict = Record<keyof typeof fr, string>;
