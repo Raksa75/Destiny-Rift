@@ -13,21 +13,13 @@ interface Props {
 
 export function NameStep({ value, onNext, onBack, step, totalSteps }: Props) {
   const { t } = useI18n();
-  const [name, setName] = useState(value || generateRandomName());
+  const [name] = useState(value || generateRandomName());
 
   return (
     <WizardShell title={t('creation.name.title')} hint={t('creation.name.hint')} onBack={onBack} step={step} totalSteps={totalSteps}>
       <div className="flex flex-col gap-6">
-        <div className="flex items-center gap-3 rounded-lg bg-rift-panel-2 border border-rift-border px-4 py-4">
-          <span className="flex-1 text-xl font-semibold text-rift-text-bright">{name}</span>
-          <button
-            type="button"
-            onClick={() => setName(generateRandomName())}
-            title={t('creation.name.random')}
-            className="shrink-0 rounded-lg border border-rift-border bg-rift-panel hover:border-rift-blue px-4 py-2 text-xl transition-colors"
-          >
-            🎲
-          </button>
+        <div className="rounded-lg bg-rift-panel-2 border border-rift-border px-4 py-4">
+          <span className="text-xl font-semibold text-rift-text-bright">{name}</span>
         </div>
         <button
           onClick={() => onNext(name)}

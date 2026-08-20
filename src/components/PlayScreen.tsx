@@ -361,7 +361,6 @@ export function PlayScreen({ career, onUpdate, onBack }: Props) {
         <MatchCard
           match={turn.match}
           badge={t(turn.isFinal ? 'match.badge.final' : 'match.badge.regular')}
-          stats={career.stats}
           resolveWin={(option) => resolveMatch(option, career.stats)}
           onResult={(option, won) => handleMatchAnswer(option, won, turn.isFinal)}
         />
@@ -369,30 +368,22 @@ export function PlayScreen({ career, onUpdate, onBack }: Props) {
         <section className="rounded-2xl border border-rift-blue/40 bg-rift-panel/80 p-5 animate-[fadeIn_0.2s_ease-out]">
           <p className="text-rift-text-bright font-medium mb-4">💬 {question.text}</p>
           <div className="flex flex-col gap-2.5">
-            {question.options.map((option) => {
-              const risk = option.risk ?? 'medium';
-              const relevantStat = option.relevantStat ?? 'mental';
-              const pct = Math.round(computeSuccessChance(risk, career.stats[relevantStat], career.club.tier) * 100);
-              return (
-                <button
-                  key={option.id}
-                  onClick={() => handleQuestionAnswer(option)}
-                  className="text-left rounded-lg border border-rift-border bg-rift-panel-2 hover:border-rift-blue active:scale-[0.99] px-4 py-3 text-sm text-rift-text-bright transition-all flex items-center justify-between gap-3"
-                >
-                  <span className="flex items-center gap-2 flex-wrap">
-                    {option.alias && (
-                      <span className="shrink-0 text-[10px] uppercase tracking-wide font-semibold text-rift-blue bg-rift-blue/10 rounded-full px-2 py-0.5">
-                        {t(`alias.${option.alias}` as never)}
-                      </span>
-                    )}
-                    {option.text}
-                  </span>
-                  <span className="shrink-0 text-xs font-semibold text-rift-gold-bright bg-rift-gold/15 rounded-full px-2 py-0.5">
-                    {t('match.winChance', { pct: String(pct) })}
-                  </span>
-                </button>
-              );
-            })}
+            {question.options.map((option) => (
+              <button
+                key={option.id}
+                onClick={() => handleQuestionAnswer(option)}
+                className="text-left rounded-lg border border-rift-border bg-rift-panel-2 hover:border-rift-blue active:scale-[0.99] px-4 py-3 text-sm text-rift-text-bright transition-all"
+              >
+                <span className="flex items-center gap-2 flex-wrap">
+                  {option.alias && (
+                    <span className="shrink-0 text-[10px] uppercase tracking-wide font-semibold text-rift-blue bg-rift-blue/10 rounded-full px-2 py-0.5">
+                      {t(`alias.${option.alias}` as never)}
+                    </span>
+                  )}
+                  {option.text}
+                </span>
+              </button>
+            ))}
           </div>
         </section>
       )}

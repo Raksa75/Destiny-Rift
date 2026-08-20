@@ -12,7 +12,7 @@ import { isAbroad, relocate } from '../data/homesickness';
 import { resolveSeasonAwards } from '../data/awards';
 import type { AwardId } from '../data/awards';
 import type { MatchOption, MatchQuestion } from '../data/matchTypes';
-import type { CareerLogEntry, CareerRecord, ClubOffer, SeasonPlacement } from '../types';
+import type { CareerLogEntry, CareerRecord, ClubHistoryEntry, ClubOffer, SeasonPlacement } from '../types';
 import { MatchCard } from './MatchCard';
 import { InternationalBracket } from './InternationalBracket';
 
@@ -37,14 +37,12 @@ interface Props {
   onFinish: (patch: Partial<CareerRecord>, logAdds: CareerLogEntry[]) => void;
 }
 
-// One-time resolution of individual awards + national/all-star selections for the season
-// that just ended, computed once via useState's lazy initializer (the sanctioned place for
-// a one-shot random computation) rather than mutated into refs during render.
+// One-time resolution of individual awards for the season that just ended, computed once
+// via useState's lazy initializer (the sanctioned place for a one-shot random computation)
+// rather than mutated into refs during render.
 function resolveSeasonWrapUp(career: CareerRecord, placement: SeasonPlacement, t: ReturnType<typeof useI18n>['t']) {
   const logs: CareerLogEntry[] = [];
   const awards: string[] = [];
-  let popularity = 0;
-  let selections = 0;
   const addWrapLog = (text: string) => logs.push({ age: career.age, month: career.month, text });
 
   const isFirstMajorSeason = career.club.tier === 'MAJOR' && !career.hasPlayedMajorSeason;
@@ -68,23 +66,21 @@ function resolveSeasonWrapUp(career: CareerRecord, placement: SeasonPlacement, t
     addWrapLog(t('award.WORLD_BEST.log'));
   }
 
-  const selectionChance =
-    career.club.tier === 'MAJOR'
-      ? placement === 'TOP'
-        ? 0.5
-        : placement === 'MID'
-          ? 0.2
-          : 0.05
-      : career.club.tier === 'DIV2' && placement === 'TOP'
-        ? 0.1
-        : 0;
-  if (Math.random() < selectionChance) {
-    selections += 1;
-    popularity += 3;
-    addWrapLog(t('season.selection.log'));
-  }
+  return { logs, awards };
+}
 
-  return { logs, awards, popularity, selections };
+// Closes out the current club-history entry and opens a new one on a real transfer;
+// on a same-club renewal or promotion, keeps the entry open but reflects a tier change.
+function updateClubHistory(history: ClubHistoryEntry[], year: number, patchClub: ClubOffer): ClubHistoryEntry[] {
+  const last = history[history.length - 1];
+  if (!last || last.name !== patchClub.name) {
+    const closed = last ? [...history.slice(0, -1), { ...last, toYear: year }] : [];
+    return [...closed, { name: patchClub.name, tier: patchClub.tier, region: patchClub.region, fromYear: year, toYear: null }];
+  }
+  if (last.tier !== patchClub.tier) {
+    return [...history.slice(0, -1), { ...last, tier: patchClub.tier }];
+  }
+  return history;
 }
 
 export function SeasonEndFlow({ career, placement, onFinish }: Props) {
@@ -98,10 +94,9 @@ export function SeasonEndFlow({ career, placement, onFinish }: Props) {
   // would land a useState update. Refs read back their own writes immediately.
   const logAdds = useRef<CareerLogEntry[]>(seasonWrapUp.logs);
   const bonusMoney = useRef(0);
-  const bonusPopularity = useRef(seasonWrapUp.popularity);
+  const bonusPopularity = useRef(0);
   const bonusTitles = useRef<string[]>([]);
   const bonusAwards = useRef<string[]>(seasonWrapUp.awards);
-  const bonusSelections = useRef(seasonWrapUp.selections);
 
   const addLog = (text: string) => {
     logAdds.current = [...logAdds.current, { age: career.age, month: career.month, text }];
@@ -113,13 +108,13 @@ export function SeasonEndFlow({ career, placement, onFinish }: Props) {
       patchClub.id === career.club.id ? career.homesickness : relocate(career.homesickness, abroad);
     return {
       club: patchClub,
+      clubHistory: updateClubHistory(career.clubHistory, career.year, patchClub),
       contractUntilYear: patchContractUntilYear,
       money: career.money + bonusMoney.current,
       careerEarnings: career.careerEarnings + Math.max(0, bonusMoney.current),
       popularity: clamp(career.popularity + bonusPopularity.current),
       titles: bonusTitles.current.length ? [...career.titles, ...bonusTitles.current] : career.titles,
       awards: bonusAwards.current.length ? [...career.awards, ...bonusAwards.current] : career.awards,
-      selections: career.selections + bonusSelections.current,
       hasPlayedMajorSeason: career.hasPlayedMajorSeason || career.club.tier === 'MAJOR',
       homesickness,
     };
@@ -209,7 +204,6 @@ export function SeasonEndFlow({ career, placement, onFinish }: Props) {
             ))}
           </div>
         )}
-        {seasonWrapUp.selections > 0 && <p className="text-sm text-rift-blue font-medium">🌟 {t('season.selection.log')}</p>}
         <button
           onClick={startFlow}
           className="rounded-lg bg-rift-blue hover:bg-rift-blue-dark text-rift-bg font-semibold px-6 py-2.5 transition-colors"
@@ -317,7 +311,6 @@ export function SeasonEndFlow({ career, placement, onFinish }: Props) {
         <MatchCard
           match={step.match}
           badge={t('match.badge.promotion')}
-          stats={career.stats}
           resolveWin={(option: MatchOption) => resolvePromotionMatch(option, career.stats)}
           onResult={(_option, won) => {
             if (won) {

@@ -49,3 +49,48 @@ export const REAL_MAJOR_TEAMS: Partial<Record<RegionId, string[]>> = {
   LATAM: ['LOUD', 'paiN Gaming', 'FURIA', 'RED Canids', 'Keyd Stars', 'Fluxo W7M'],
   ASIA: ['CTBC Flying Oyster', 'Frank Esports', 'Deep Cross Gaming', 'Beyond Gaming', 'Meta Falcon'],
 };
+
+// Real second-tier/development organizations per region — the DIV2 equivalent of the
+// LFL, LCK Challengers League, LDL, NACL, etc. Distinct from the Major League org names
+// above: a DIV2 offer from these leagues reads as a real developmental club, not as
+// (incorrectly) the top-flight org itself.
+export const REAL_DIV2_TEAMS: Partial<Record<RegionId, string[]>> = {
+  EUROPE: [
+    'Solary',
+    'Vitality.Bee',
+    'GameWard',
+    'BK ROG Esports',
+    'Mirage',
+    'Karmine Corp Blue',
+    'LDLC OL',
+    'Team du Sud',
+  ],
+  KOREA: [
+    'T1 Esports Academy',
+    'Gen.G Global Academy',
+    'DN Freecs Challengers',
+    'Kwangdong Freecs Challengers',
+    'BRION Challengers',
+    'Nongshim RedForce Challengers',
+    'Hanwha Life Esports Challengers',
+  ],
+  CHINA: [
+    "Anyone's Legend Junior",
+    'Ultra Prime Junior',
+    'Rare Atom',
+    'TT Gaming',
+    'Suzhou LNG Ever Young',
+    'Wolves Esports',
+    'Vici Gaming Junior',
+  ],
+  NA: [
+    'Cloud9 Kia',
+    'Disguised',
+    'Immortals Progress',
+    'FlyQuest Red',
+    'Golden Guardians Academy',
+    'TSM',
+  ],
+  LATAM: ['Isurus', 'Estral Esports', 'Six Karma', 'Vivo Keyd Bandeirantes', 'Case Esports'],
+  ASIA: ['ahq Esports Club', 'J Team', 'Hurricane Gaming', 'Alpha Esports'],
+};

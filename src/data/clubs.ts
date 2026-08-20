@@ -1,6 +1,6 @@
 import { TIER_ORDER } from '../types';
 import type { ClubOffer, ClubTier, RegionId, SeasonPlacement } from '../types';
-import { REAL_MAJOR_TEAMS } from './realTeams';
+import { REAL_DIV2_TEAMS, REAL_MAJOR_TEAMS } from './realTeams';
 
 export const CLUB_NAME_POOL = [
   'Voidling Esports',
@@ -28,7 +28,10 @@ export const CLUB_NAME_POOL = [
 function namePool(tier: ClubTier, region: RegionId): string[] {
   // Real organizations show up starting at DIV2, not just MAJOR — reaching a Major League
   // club can take many seasons, and players want to recognize real names well before that.
-  if (tier === 'MAJOR' || tier === 'DIV2') return REAL_MAJOR_TEAMS[region] ?? CLUB_NAME_POOL;
+  // DIV2 draws from the real second-tier/development scene (LFL, Challengers League, LDL,
+  // NACL...), not the top-flight org names, which are reserved for MAJOR.
+  if (tier === 'MAJOR') return REAL_MAJOR_TEAMS[region] ?? CLUB_NAME_POOL;
+  if (tier === 'DIV2') return REAL_DIV2_TEAMS[region] ?? CLUB_NAME_POOL;
   return CLUB_NAME_POOL;
 }
 

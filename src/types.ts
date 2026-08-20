@@ -35,6 +35,14 @@ export interface CareerLogEntry {
   text: string;
 }
 
+export interface ClubHistoryEntry {
+  name: string;
+  tier: ClubTier;
+  region: RegionId;
+  fromYear: number;
+  toYear: number | null; // null = still there
+}
+
 export interface CareerRecord {
   id: string;
   name: string;
@@ -56,12 +64,12 @@ export interface CareerRecord {
   year: number;
   club: ClubOffer;
   firstClub: ClubOffer;
+  clubHistory: ClubHistoryEntry[];
   contractUntilYear: number;
   matchesPlayed: number;
   wins: number;
   losses: number;
   mvpCount: number;
-  selections: number;
   careerKills: number;
   careerAssists: number;
   careerCS: number;

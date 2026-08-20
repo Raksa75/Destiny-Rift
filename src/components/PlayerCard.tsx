@@ -97,7 +97,6 @@ export function PlayerCard({ career }: { career: CareerRecord }) {
             <StatRow label={t('card.wins')} value={career.wins} />
             <StatRow label={t('card.losses')} value={career.losses} />
             <StatRow label={t('card.mvp')} value={career.mvpCount} />
-            <StatRow label={t('card.selections')} value={career.selections} />
             <StatRow label={t('card.kills')} value={career.careerKills} />
             <StatRow label={t('card.assists')} value={career.careerAssists} />
             <StatRow label={t('card.cs')} value={career.careerCS} />
@@ -153,6 +152,25 @@ export function PlayerCard({ career }: { career: CareerRecord }) {
                 <span className="text-rift-text-bright font-medium">{career.careerEarnings}€</span>
               </div>
             </div>
+          </section>
+
+          <section>
+            <h2 className="text-sm uppercase tracking-wide text-rift-text mb-2">🏟️ {t('card.clubHistory')}</h2>
+            <ul className="flex flex-col gap-1.5 text-sm">
+              {[...career.clubHistory].reverse().map((entry, i) => (
+                <li key={i} className="flex items-center justify-between gap-2">
+                  <span className="text-rift-text-bright font-medium truncate">
+                    {entry.name}{' '}
+                    <span className="text-[10px] font-normal text-rift-text border border-rift-border rounded px-1 py-0.5 ml-1">
+                      {t(`tier.short.${entry.tier}` as never)}
+                    </span>
+                  </span>
+                  <span className="text-rift-text text-xs shrink-0">
+                    {entry.fromYear}–{entry.toYear ?? t('card.clubHistory.present')}
+                  </span>
+                </li>
+              ))}
+            </ul>
           </section>
         </div>
       )}
