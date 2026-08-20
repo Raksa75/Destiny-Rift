@@ -4,9 +4,11 @@ import { pickQuestion } from '../data/questions';
 import { generateMatchPerformance, pickRegularMatch, resolveMatch } from '../data/matches';
 import { monthlySalary } from '../data/salary';
 import { overallRating } from '../data/creation';
-import { computeSeasonPlacement } from '../data/season';
+import { computeSeasonPlacement, padSeasonRecord } from '../data/season';
 import { growthMultiplier, naturalDecay } from '../data/aging';
 import { isAbroad, moraleDrain, monthlyDecay as homesicknessDecay } from '../data/homesickness';
+import { computeSuccessChance, outcomeNarrativeKey, resolveOutcome } from '../data/outcomes';
+import { rollTraitUnlock, applyTraitBuff } from '../data/traits';
 import type { QuestionOption } from '../data/questionTypes';
 import type { MatchOption, MatchQuestion } from '../data/matchTypes';
 import { SEASON_LENGTH_MONTHS } from '../types';
@@ -24,6 +26,7 @@ interface Props {
 }
 
 const STAT_KEYS: StatKey[] = ['micro', 'macro', 'teamfight', 'lane', 'mental', 'serious', 'coach', 'locker'];
+const MONTH_KEYS = Array.from({ length: 12 }, (_, i) => `month.${i + 1}`);
 
 function clamp(n: number, lo = 0, hi = 100) {
   return Math.max(lo, Math.min(hi, n));
@@ -48,6 +51,7 @@ interface PendingResult {
   badge?: string;
   deltas: DeltaItem[];
   extraLines: string[];
+  traitUnlock?: string;
   seasonJustEnded: boolean;
 }
 
@@ -67,6 +71,8 @@ export function PlayScreen({ career, onUpdate, onBack }: Props) {
     moraleDelta: number;
     narrative: string;
     badge?: string;
+    traitBuff?: Partial<CareerRecord['stats']>;
+    traitUnlock?: string;
     matchOutcome?: boolean;
     matchPerf?: { kills: number; assists: number; cs: number };
   }) => {
@@ -77,7 +83,7 @@ export function PlayScreen({ career, onUpdate, onBack }: Props) {
 
     const mult = growthMultiplier(career.age) * (languageBarrier ? 0.85 : 1);
     const decay = naturalDecay(career.age, career.longevity);
-    const stats = { ...career.stats };
+    let stats = { ...career.stats };
     const statDeltaItems: DeltaItem[] = [];
     for (const key of STAT_KEYS) {
       const chosen = params.statDeltas[key] ?? 0;
@@ -87,6 +93,9 @@ export function PlayScreen({ career, onUpdate, onBack }: Props) {
         stats[key] = clamp(stats[key] + total);
         statDeltaItems.push({ label: t(`stat.${key}` as never), value: total });
       }
+    }
+    if (params.traitBuff) {
+      stats = applyTraitBuff(stats, params.traitBuff);
     }
 
     let month = career.month + 1;
@@ -208,6 +217,7 @@ export function PlayScreen({ career, onUpdate, onBack }: Props) {
       badge: params.badge,
       deltas,
       extraLines,
+      traitUnlock: params.traitUnlock,
       seasonJustEnded,
     });
   };
@@ -217,25 +227,45 @@ export function PlayScreen({ career, onUpdate, onBack }: Props) {
     setRecentIds(nextRecentIds);
     setQuestion(pickQuestion(lang, nextRecentIds));
 
+    const risk = option.risk ?? 'medium';
+    const relevantStat = option.relevantStat ?? 'mental';
+    const chance = computeSuccessChance(risk, career.stats[relevantStat], career.club.tier);
+    const succeeded = Math.random() < chance;
+    const resolved = resolveOutcome(succeeded, option);
+    const narrative = t(outcomeNarrativeKey(succeeded, option.alias, false) as never, { action: option.text });
+
+    let traitBuff: Partial<CareerRecord['stats']> | undefined;
+    let traitUnlock: string | undefined;
+    if (succeeded) {
+      const unlocked = rollTraitUnlock(option.alias, career.traits);
+      if (unlocked) {
+        traitBuff = unlocked.buff;
+        traitUnlock = t('trait.unlocked', { trait: t(`trait.${unlocked.id}` as never) });
+      }
+    }
+
     computeOutcome({
-      statDeltas: option.statDeltas,
-      moneyDelta: option.moneyDelta ?? 0,
-      popularityDelta: option.popularityDelta ?? 0,
-      formDelta: option.formDelta ?? 0,
-      moraleDelta: option.moraleDelta ?? 0,
-      narrative: option.text,
+      statDeltas: resolved.statDeltas,
+      moneyDelta: resolved.moneyDelta,
+      popularityDelta: resolved.popularityDelta,
+      formDelta: resolved.formDelta,
+      moraleDelta: resolved.moraleDelta,
+      narrative,
+      traitBuff,
+      traitUnlock,
     });
   };
 
   const handleMatchAnswer = (option: MatchOption, won: boolean, isFinal: boolean) => {
     const perf = generateMatchPerformance(career.role, career.stats, won);
+    const narrative = t(outcomeNarrativeKey(won, undefined, true) as never, { action: option.text });
     computeOutcome({
       statDeltas: {},
       moneyDelta: won ? 100 : 0,
       popularityDelta: won ? 2 : -1,
       formDelta: -3,
       moraleDelta: won ? 3 : -3,
-      narrative: option.text,
+      narrative,
       badge: t(won ? 'intl.result.win' : 'intl.result.loss'),
       matchOutcome: won,
       matchPerf: perf,
@@ -246,24 +276,52 @@ export function PlayScreen({ career, onUpdate, onBack }: Props) {
   const commitPending = () => {
     if (!pending) return;
     const { updated, seasonJustEnded } = pending;
-    onUpdate(updated);
-    setPending(null);
-    if (seasonJustEnded) {
-      setSeasonPlacement(computeSeasonPlacement(updated.seasonWins, updated.seasonLosses));
-    } else {
+    if (!seasonJustEnded) {
+      onUpdate(updated);
+      setPending(null);
       setTurn(rollTurn(updated, lang));
+      return;
     }
+
+    const padded = padSeasonRecord(updated.seasonWins, updated.seasonLosses);
+    const paddedLog: CareerLogEntry = {
+      age: updated.age,
+      month: updated.month,
+      text: t('play.season.padded.log', {
+        wins: String(padded.addedWins),
+        losses: String(padded.addedLosses),
+      }),
+    };
+    const finalUpdated: CareerRecord = {
+      ...updated,
+      seasonWins: padded.wins,
+      seasonLosses: padded.losses,
+      wins: updated.wins + padded.addedWins,
+      losses: updated.losses + padded.addedLosses,
+      matchesPlayed: updated.matchesPlayed + padded.addedWins + padded.addedLosses,
+      ratingHistory: [...updated.ratingHistory, Math.round(overallRating(updated.stats))].slice(-20),
+      log: [paddedLog, ...updated.log].slice(0, 30),
+    };
+    onUpdate(finalUpdated);
+    setPending(null);
+    setSeasonPlacement(computeSeasonPlacement(finalUpdated.seasonWins, finalUpdated.seasonLosses));
   };
 
   const monthInSeason = (career.turnCount % SEASON_LENGTH_MONTHS) + 1;
+  const monthName = t(MONTH_KEYS[career.month - 1] as never);
 
   return (
-    <div className="min-h-svh px-4 py-6 pb-20 max-w-3xl mx-auto flex flex-col gap-6">
+    <div className="min-h-svh px-4 py-6 pb-10 max-w-3xl mx-auto flex flex-col gap-6">
       <div className="flex items-center justify-between mt-12">
-        <span className="text-sm text-rift-blue font-medium">
-          🏆 {t('play.season', { n: String(career.seasonsPlayed + 1) })} · {monthInSeason}/{SEASON_LENGTH_MONTHS}
-        </span>
-        <button onClick={onBack} className="text-sm text-rift-onbg-muted hover:text-rift-onbg transition-colors">
+        <div>
+          <p className="text-2xl font-bold text-rift-gold-bright leading-none">
+            {monthName} {career.year}
+          </p>
+          <p className="text-sm text-rift-blue font-medium mt-1">
+            🏆 {t('play.season', { n: String(career.seasonsPlayed + 1) })} · {monthInSeason}/{SEASON_LENGTH_MONTHS}
+          </p>
+        </div>
+        <button onClick={onBack} className="text-sm text-rift-onbg-muted hover:text-rift-onbg transition-colors shrink-0">
           {t('common.menu')}
         </button>
       </div>
@@ -295,6 +353,7 @@ export function PlayScreen({ career, onUpdate, onBack }: Props) {
           narrative={pending.narrative}
           deltas={pending.deltas}
           extraLines={pending.extraLines}
+          traitUnlock={pending.traitUnlock}
           onContinue={commitPending}
           continueLabel={t('season.continue')}
         />
@@ -302,22 +361,38 @@ export function PlayScreen({ career, onUpdate, onBack }: Props) {
         <MatchCard
           match={turn.match}
           badge={t(turn.isFinal ? 'match.badge.final' : 'match.badge.regular')}
+          stats={career.stats}
           resolveWin={(option) => resolveMatch(option, career.stats)}
           onResult={(option, won) => handleMatchAnswer(option, won, turn.isFinal)}
         />
       ) : (
-        <section className="rounded-2xl border border-rift-blue/40 bg-rift-panel/80 p-5">
+        <section className="rounded-2xl border border-rift-blue/40 bg-rift-panel/80 p-5 animate-[fadeIn_0.2s_ease-out]">
           <p className="text-rift-text-bright font-medium mb-4">💬 {question.text}</p>
           <div className="flex flex-col gap-2.5">
-            {question.options.map((option) => (
-              <button
-                key={option.id}
-                onClick={() => handleQuestionAnswer(option)}
-                className="text-left rounded-lg border border-rift-border bg-rift-panel-2 hover:border-rift-blue px-4 py-3 text-sm text-rift-text-bright transition-colors"
-              >
-                {option.text}
-              </button>
-            ))}
+            {question.options.map((option) => {
+              const risk = option.risk ?? 'medium';
+              const relevantStat = option.relevantStat ?? 'mental';
+              const pct = Math.round(computeSuccessChance(risk, career.stats[relevantStat], career.club.tier) * 100);
+              return (
+                <button
+                  key={option.id}
+                  onClick={() => handleQuestionAnswer(option)}
+                  className="text-left rounded-lg border border-rift-border bg-rift-panel-2 hover:border-rift-blue active:scale-[0.99] px-4 py-3 text-sm text-rift-text-bright transition-all flex items-center justify-between gap-3"
+                >
+                  <span className="flex items-center gap-2 flex-wrap">
+                    {option.alias && (
+                      <span className="shrink-0 text-[10px] uppercase tracking-wide font-semibold text-rift-blue bg-rift-blue/10 rounded-full px-2 py-0.5">
+                        {t(`alias.${option.alias}` as never)}
+                      </span>
+                    )}
+                    {option.text}
+                  </span>
+                  <span className="shrink-0 text-xs font-semibold text-rift-gold-bright bg-rift-gold/15 rounded-full px-2 py-0.5">
+                    {t('match.winChance', { pct: String(pct) })}
+                  </span>
+                </button>
+              );
+            })}
           </div>
         </section>
       )}
@@ -335,15 +410,6 @@ export function PlayScreen({ career, onUpdate, onBack }: Props) {
           ))}
         </div>
       </section>
-
-      <div className="fixed bottom-0 left-0 right-0 border-t border-rift-border bg-rift-panel/95 backdrop-blur px-4 py-3">
-        <div className="max-w-3xl mx-auto flex items-center justify-between text-sm">
-          <span className="text-rift-text">{career.year}</span>
-          <span className="text-rift-text-bright font-medium">
-            💰 {t('card.fortune')}: {career.money}€
-          </span>
-        </div>
-      </div>
     </div>
   );
 }

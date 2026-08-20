@@ -26,7 +26,9 @@ export const CLUB_NAME_POOL = [
 ];
 
 function namePool(tier: ClubTier, region: RegionId): string[] {
-  if (tier === 'MAJOR') return REAL_MAJOR_TEAMS[region] ?? CLUB_NAME_POOL;
+  // Real organizations show up starting at DIV2, not just MAJOR — reaching a Major League
+  // club can take many seasons, and players want to recognize real names well before that.
+  if (tier === 'MAJOR' || tier === 'DIV2') return REAL_MAJOR_TEAMS[region] ?? CLUB_NAME_POOL;
   return CLUB_NAME_POOL;
 }
 

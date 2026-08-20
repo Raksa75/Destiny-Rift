@@ -74,6 +74,8 @@ export interface CareerRecord {
   retirementReason: string | null;
   titles: string[];
   awards: string[];
+  traits: TraitId[];
+  ratingHistory: number[]; // OVR recorded at the end of each season, oldest first
   turnCount: number; // total questions answered since career start
   seasonsPlayed: number;
   seasonWins: number;
@@ -81,6 +83,8 @@ export interface CareerRecord {
   log: CareerLogEntry[];
   createdAt: string;
 }
+
+export type TraitId = 'LEADER' | 'ICE_COLD' | 'SHOWMAN' | 'TILTER';
 
 export const START_AGE = 14;
 export const SEASON_LENGTH_MONTHS = 4;

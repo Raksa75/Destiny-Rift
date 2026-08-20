@@ -32,3 +32,39 @@ export function resolveContractRenewal(placement: SeasonPlacement): boolean {
   const chance = placement === 'TOP' ? 0.85 : placement === 'MID' ? 0.55 : 0.25;
   return Math.random() < chance;
 }
+
+// A League split is 18 games. Only a handful of those are interactive match turns —
+// the rest of the split is simulated in the background so the season record (and the
+// standing computed from it) reflects a full 18-game season without adding more bubbles.
+export const SEASON_TOTAL_GAMES = 18;
+
+export interface PaddedRecord {
+  wins: number;
+  losses: number;
+  addedWins: number;
+  addedLosses: number;
+}
+
+export function padSeasonRecord(interactiveWins: number, interactiveLosses: number): PaddedRecord {
+  const playedSoFar = interactiveWins + interactiveLosses;
+  const remaining = Math.max(0, SEASON_TOTAL_GAMES - playedSoFar);
+  // Blend the interactive win rate toward 0.5 so a tiny sample (1-2 games) doesn't
+  // extrapolate into an unrealistic sweep or shutout across the padded remainder.
+  const rawRate = playedSoFar > 0 ? interactiveWins / playedSoFar : 0.5;
+  const blendedRate = 0.5 + (rawRate - 0.5) * 0.6;
+  let addedWins = 0;
+  let addedLosses = 0;
+  for (let i = 0; i < remaining; i++) {
+    if (Math.random() < blendedRate) addedWins++;
+    else addedLosses++;
+  }
+  return { wins: interactiveWins + addedWins, losses: interactiveLosses + addedLosses, addedWins, addedLosses };
+}
+
+// Final league standing out of 10 (1 = best), from the padded season's win rate.
+export function computeStanding(wins: number, losses: number): number {
+  const total = wins + losses;
+  if (total === 0) return 6;
+  const rate = wins / total;
+  return Math.max(1, Math.min(10, Math.round(10 - rate * 9)));
+}

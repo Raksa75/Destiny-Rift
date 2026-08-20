@@ -4,7 +4,7 @@ import { overallRating } from '../data/creation';
 import { generateTransferOffers } from '../data/clubs';
 import { monthlySalary, contractLengthYears } from '../data/salary';
 import { pickFinalMatch } from '../data/matches';
-import { canAttemptPromotion, promotedTier, resolveContractRenewal, resolvePromotionMatch } from '../data/season';
+import { canAttemptPromotion, computeStanding, promotedTier, resolveContractRenewal, resolvePromotionMatch } from '../data/season';
 import { internationalEventForSeason, internationalReward, qualifiesForInternational } from '../data/international';
 import type { InternationalEventId, InternationalPlacement } from '../data/international';
 import { coachOfferChance, forcedRetirementAge } from '../data/aging';
@@ -197,7 +197,7 @@ export function SeasonEndFlow({ career, placement, onFinish }: Props) {
           🏁 {t('season.summary.title', { n: String(career.seasonsPlayed) })}
         </p>
         <p className="text-rift-text-bright font-medium">
-          {t('season.summary.record', { wins: String(career.seasonWins), losses: String(career.seasonLosses) })}
+          {t('season.summary.standing', { standing: String(computeStanding(career.seasonWins, career.seasonLosses)) })}
         </p>
         <p className="text-rift-text">{t(`season.placement.${placement}` as never)}</p>
         {seasonWrapUp.awards.length > 0 && (
@@ -317,6 +317,7 @@ export function SeasonEndFlow({ career, placement, onFinish }: Props) {
         <MatchCard
           match={step.match}
           badge={t('match.badge.promotion')}
+          stats={career.stats}
           resolveWin={(option: MatchOption) => resolvePromotionMatch(option, career.stats)}
           onResult={(_option, won) => {
             if (won) {

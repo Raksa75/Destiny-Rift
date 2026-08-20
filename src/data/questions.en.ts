@@ -23,7 +23,7 @@ const questions: Question[] = [
     id: 'scrim_loss',
     text: 'After a rough scrim loss, your team is demoralized.',
     options: [
-      { id: 'motivate', text: 'You rally the group', statDeltas: { mental: 3, teamfight: 2, locker: 4 }, formDelta: -1, moraleDelta: 4 },
+      { id: 'motivate', text: 'You rally the group', alias: 'leader', risk: 'medium', relevantStat: 'locker', statDeltas: { mental: 3, teamfight: 2, locker: 4 }, formDelta: -1, moraleDelta: 4 },
       { id: 'silent', text: 'You stay quiet, focused on yourself', statDeltas: { micro: 1 } },
       { id: 'blame', text: 'You blame a teammate', statDeltas: { mental: -3, locker: -6 }, popularityDelta: -2, moraleDelta: -5 },
     ],
@@ -41,7 +41,7 @@ const questions: Question[] = [
     id: 'influencer_clip',
     text: 'An influencer offers to make a clip together for their channel.',
     options: [
-      { id: 'accept', text: 'You accept, it could help your career', statDeltas: {}, moneyDelta: 50, popularityDelta: 5, formDelta: -2, moraleDelta: 3 },
+      { id: 'accept', text: 'You accept, it could help your career', alias: 'showman', risk: 'medium', relevantStat: 'locker', statDeltas: {}, moneyDelta: 50, popularityDelta: 5, formDelta: -2, moraleDelta: 3 },
       { id: 'focus', text: 'You stay focused on training', statDeltas: { micro: 2 }, formDelta: -3 },
       { id: 'refuse', text: "You refuse, you don't like the exposure", statDeltas: { mental: 1 }, popularityDelta: -1, moraleDelta: -1 },
     ],
@@ -50,7 +50,7 @@ const questions: Question[] = [
     id: 'school_or_esport',
     text: 'You need to decide between school and esports for this year.',
     options: [
-      { id: 'allin', text: 'You go all in on esports', statDeltas: { teamfight: 3, serious: -2 }, formDelta: -6, moraleDelta: -2 },
+      { id: 'allin', text: 'You go all in on esports', alias: 'risque', risk: 'risky', relevantStat: 'mental', statDeltas: { teamfight: 3, serious: -2 }, formDelta: -6, moraleDelta: -2 },
       { id: 'balance', text: 'You keep a balance between both', statDeltas: { serious: 2 }, formDelta: -1, moraleDelta: 1 },
       { id: 'school', text: 'You prioritize school, esports on the side', statDeltas: { mental: 2, micro: -3 }, formDelta: 3, moraleDelta: 2 },
     ],
@@ -68,7 +68,7 @@ const questions: Question[] = [
     id: 'public_criticism',
     text: 'A teammate criticizes you publicly on social media.',
     options: [
-      { id: 'calm', text: 'You reply calmly in private', statDeltas: { mental: 2, serious: 2, locker: 3 }, moraleDelta: 2 },
+      { id: 'calm', text: 'You reply calmly in private', alias: 'sangfroid', risk: 'safe', relevantStat: 'mental', statDeltas: { mental: 2, serious: 2, locker: 3 }, moraleDelta: 2 },
       { id: 'ignore', text: 'You ignore it completely', statDeltas: {}, moraleDelta: -1 },
       { id: 'clash', text: 'You clash back publicly', statDeltas: { mental: -2, locker: -5 }, popularityDelta: -4, formDelta: -1, moraleDelta: -5 },
     ],
@@ -233,6 +233,213 @@ const questions: Question[] = [
       { id: 'stay_calm', text: 'You handle the situation calmly', statDeltas: { mental: 2, serious: 1 }, formDelta: -2 },
       { id: 'stress', text: 'The stress eats at you while you wait', statDeltas: { mental: -3 }, formDelta: -5, moraleDelta: -3 },
       { id: 'remote_prep', text: 'You train remotely in the meantime', statDeltas: { micro: 2 }, formDelta: -1 },
+    ],
+  },
+  {
+    id: 'draft_leak',
+    text: '🔓 Your secret draft plan for the next match leaked online.',
+    options: [
+      { id: 'change_plan', text: 'You change the plan at the last minute', alias: 'risque', risk: 'risky', relevantStat: 'macro', statDeltas: { macro: 3, mental: -1 }, formDelta: -3 },
+      { id: 'ignore_leak', text: 'You ignore the leak and keep the plan', risk: 'medium', relevantStat: 'mental', statDeltas: { mental: 1 } },
+      { id: 'blame_hunt', text: 'You go looking for who leaked it', statDeltas: { locker: -3, mental: -2 }, moraleDelta: -3 },
+    ],
+  },
+  {
+    id: 'new_teammate',
+    text: '🤝 A new teammate joins the roster mid-season.',
+    options: [
+      { id: 'welcome', text: 'You welcome them and help them settle in', alias: 'leader', risk: 'safe', relevantStat: 'locker', statDeltas: { locker: 4, mental: 1 }, moraleDelta: 2 },
+      { id: 'neutral_new', text: 'You stay professional, nothing more', statDeltas: {} },
+      { id: 'cold', text: 'You keep your distance, wary', statDeltas: { locker: -3 }, moraleDelta: -1 },
+    ],
+  },
+  {
+    id: 'sponsor_event',
+    text: '🎪 A sponsor organizes a public event with the team.',
+    options: [
+      { id: 'shine', text: 'You go all out in front of the cameras', alias: 'showman', risk: 'medium', relevantStat: 'locker', statDeltas: {}, moneyDelta: 60, popularityDelta: 5, formDelta: -3 },
+      { id: 'professional', text: 'You stay low-key but professional', statDeltas: {}, moneyDelta: 30, popularityDelta: 1 },
+      { id: 'skip_event', text: 'You cut it short to go train', statDeltas: { micro: 1 }, popularityDelta: -2 },
+    ],
+  },
+  {
+    id: 'salary_dispute',
+    text: '💸 You think you’re underpaid compared to your teammates.',
+    options: [
+      { id: 'negotiate_now', text: 'You ask for a meeting to renegotiate', alias: 'risque', risk: 'risky', relevantStat: 'serious', statDeltas: { serious: 2 }, moneyDelta: 100 },
+      { id: 'wait_season', text: 'You wait until the end of the season', statDeltas: { serious: 1 } },
+      { id: 'say_nothing', text: 'You say nothing, swallowing the frustration', statDeltas: { mental: -2 }, moraleDelta: -3 },
+    ],
+  },
+  {
+    id: 'superstition',
+    text: '🍀 After a winning streak, you discover a lucky ritual.',
+    options: [
+      { id: 'commit_ritual', text: 'You stick to it religiously', statDeltas: { mental: 2 }, formDelta: 3 },
+      { id: 'laugh_it_off', text: 'You laugh it off and move on', statDeltas: {} },
+      { id: 'obsess', text: 'It becomes almost an obsession', statDeltas: { mental: -2, serious: -1 }, formDelta: 2, moraleDelta: -1 },
+    ],
+  },
+  {
+    id: 'old_rival_reunion',
+    text: '⚔️ You run into an old rival from your early days, now on an opposing pro team.',
+    options: [
+      { id: 'friendly', text: 'You chat with them warmly', statDeltas: { mental: 1 }, popularityDelta: 2, moraleDelta: 2 },
+      { id: 'competitive', text: 'You stay distant, in competition mode', alias: 'sangfroid', risk: 'safe', relevantStat: 'mental', statDeltas: { mental: 2 } },
+      { id: 'petty', text: 'You throw a jab to rattle them', alias: 'risque', risk: 'risky', relevantStat: 'mental', statDeltas: { mental: 1 }, popularityDelta: -1 },
+    ],
+  },
+  {
+    id: 'equipment_upgrade',
+    text: '🖱️ Your gear is starting to show its age.',
+    options: [
+      { id: 'buy_top', text: 'You invest in top-of-the-line gear', statDeltas: { micro: 3 }, moneyDelta: -300 },
+      { id: 'buy_basic', text: 'You just replace the essentials', statDeltas: { micro: 1 }, moneyDelta: -80 },
+      { id: 'keep_old', text: 'You stick with your current gear', statDeltas: { micro: -2 }, formDelta: -2 },
+    ],
+  },
+  {
+    id: 'community_drama',
+    text: '💥 A controversy explodes in the community around one of your clips.',
+    options: [
+      { id: 'address_it', text: 'You speak up to explain yourself', alias: 'sangfroid', risk: 'medium', relevantStat: 'mental', statDeltas: { mental: 1 }, popularityDelta: 3 },
+      { id: 'ignore_drama', text: 'You let it pass without reacting', statDeltas: {}, popularityDelta: -1 },
+      { id: 'fuel_drama', text: 'You respond in the heat of the moment', alias: 'risque', risk: 'risky', relevantStat: 'mental', statDeltas: { mental: -2 }, popularityDelta: 2, moraleDelta: -3 },
+    ],
+  },
+  {
+    id: 'analyst_review',
+    text: '📊 An analyst publicly breaks down your mistakes from the week.',
+    options: [
+      { id: 'study_it', text: 'You study the analysis closely to improve', statDeltas: { macro: 3, mental: 1 }, formDelta: -1 },
+      { id: 'shrug_analyst', text: 'You shrug, you already knew', statDeltas: {} },
+      { id: 'defensive', text: 'You get defensive and reject the criticism', statDeltas: { mental: -2, macro: -1 }, moraleDelta: -2 },
+    ],
+  },
+  {
+    id: 'roommate_conflict',
+    text: '🏠 Tension builds with a teammate you share housing with.',
+    options: [
+      { id: 'talk_it_out', text: 'You suggest talking it out calmly', alias: 'sangfroid', risk: 'safe', relevantStat: 'locker', statDeltas: { locker: 3, mental: 1 } },
+      { id: 'avoid', text: 'You avoid the topic, it’ll settle', statDeltas: { locker: -1 } },
+      { id: 'confront', text: 'You lay it out plainly, no detour', alias: 'leader', risk: 'medium', relevantStat: 'locker', statDeltas: { locker: 2, mental: -1 }, moraleDelta: -1 },
+    ],
+  },
+  {
+    id: 'charity_stream',
+    text: '❤️ A charity asks you to join a fundraising stream.',
+    options: [
+      { id: 'full_charity', text: 'You fully commit to organizing it', alias: 'showman', risk: 'safe', relevantStat: 'locker', statDeltas: {}, popularityDelta: 6, formDelta: -2 },
+      { id: 'appear_briefly', text: 'You drop by briefly to show support', statDeltas: {}, popularityDelta: 2 },
+      { id: 'decline_charity', text: 'You decline, too busy training', statDeltas: { micro: 1 }, popularityDelta: -2 },
+    ],
+  },
+  {
+    id: 'losing_streak',
+    text: '📉 A losing streak is crushing the whole team’s morale.',
+    options: [
+      { id: 'rally_team', text: 'You step up to rally the group', alias: 'leader', risk: 'medium', relevantStat: 'locker', statDeltas: { locker: 4, teamfight: 2 }, moraleDelta: 3 },
+      { id: 'trust_process', text: 'You trust the process, without forcing it', statDeltas: { mental: 1 } },
+      { id: 'panic', text: 'You panic and overhaul everything in a rush', alias: 'risque', risk: 'risky', relevantStat: 'mental', statDeltas: { mental: -2, macro: 1 }, moraleDelta: -2 },
+    ],
+  },
+  {
+    id: 'scouting_report',
+    text: '🔍 A scouting report circulates, comparing your level to other players in your role.',
+    options: [
+      { id: 'motivated_report', text: 'It motivates you to push even harder', statDeltas: { serious: 2 }, formDelta: 3 },
+      { id: 'indifferent_report', text: 'You don’t give it much weight', statDeltas: {} },
+      { id: 'demoralized_report', text: 'The comparison gets to you a bit', statDeltas: { mental: -2 }, moraleDelta: -2 },
+    ],
+  },
+  {
+    id: 'weekend_offer',
+    text: '🎉 Friends invite you out for the weekend right in the middle of match prep.',
+    options: [
+      { id: 'go_out', text: 'You go out, you need to blow off steam', alias: 'risque', risk: 'medium', relevantStat: 'mental', statDeltas: { mental: 2 }, formDelta: -4, moraleDelta: 4 },
+      { id: 'short_visit', text: 'You drop by briefly then head home early', statDeltas: {}, moraleDelta: 2, formDelta: -1 },
+      { id: 'stay_in', text: 'You stay focused on prep', statDeltas: { serious: 1 }, formDelta: 2, moraleDelta: -1 },
+    ],
+  },
+  {
+    id: 'coach_change',
+    text: '🔁 The club announces a head coach change mid-season.',
+    options: [
+      { id: 'adapt_new_coach', text: 'You adapt quickly to the new system', statDeltas: { coach: 4, macro: 1 }, formDelta: -2 },
+      { id: 'wait_and_see', text: 'You wait and see before committing', statDeltas: { coach: 1 } },
+      { id: 'resist_change', text: 'You resist, you preferred the old coach', statDeltas: { coach: -4, mental: -1 }, moraleDelta: -2 },
+    ],
+  },
+  {
+    id: 'podcast_invite',
+    text: '🎙️ You’re invited onto a widely-followed esports podcast.',
+    options: [
+      { id: 'open_up', text: 'You open up honestly about your journey', alias: 'showman', risk: 'medium', relevantStat: 'mental', statDeltas: { mental: 1 }, popularityDelta: 6 },
+      { id: 'stay_guarded', text: 'You stay guarded in your answers', statDeltas: {}, popularityDelta: 2 },
+      { id: 'decline_podcast', text: 'You decline, not really your thing', statDeltas: {}, popularityDelta: -1 },
+    ],
+  },
+  {
+    id: 'injury_scare',
+    text: '⚠️ An unusual pain worries you before an important match.',
+    options: [
+      { id: 'get_checked', text: 'You get checked out as a precaution', statDeltas: { serious: 2 }, moneyDelta: -120, formDelta: 4 },
+      { id: 'play_through', text: 'You play anyway, the pain is manageable', alias: 'risque', risk: 'risky', relevantStat: 'mental', statDeltas: { mental: -1 }, formDelta: -3 },
+      { id: 'rest_injury', text: 'You ask for rest to be safe', statDeltas: { mental: 1 }, formDelta: 5, moraleDelta: -1 },
+    ],
+  },
+  {
+    id: 'fan_meetup',
+    text: '🤗 The club organizes a fan meetup after a match.',
+    options: [
+      { id: 'stay_late', text: 'You stay late to talk to everyone', alias: 'showman', risk: 'safe', relevantStat: 'locker', statDeltas: {}, popularityDelta: 5, formDelta: -1 },
+      { id: 'quick_meetup', text: 'You do a quick, polite round', statDeltas: {}, popularityDelta: 2 },
+      { id: 'skip_meetup', text: 'You leave quickly, tired after the match', statDeltas: {}, popularityDelta: -2, moraleDelta: 1 },
+    ],
+  },
+  {
+    id: 'academy_call',
+    text: '🎓 The club asks you to mentor a young player from the academy team.',
+    options: [
+      { id: 'mentor', text: 'You take the time to train them properly', alias: 'leader', risk: 'safe', relevantStat: 'locker', statDeltas: { locker: 4, coach: 2 }, formDelta: -1 },
+      { id: 'light_mentor', text: 'You give some quick pointers', statDeltas: { locker: 1 } },
+      { id: 'refuse_mentor', text: 'You refuse, no time for that', statDeltas: { locker: -2 } },
+    ],
+  },
+  {
+    id: 'anniversary',
+    text: '🎂 It’s a loved one’s important birthday, right in the middle of match season.',
+    options: [
+      { id: 'go_home', text: 'You make the trip to be there', statDeltas: {}, moneyDelta: -60, moraleDelta: 5, formDelta: -3 },
+      { id: 'call_home', text: 'You call for a long time that evening', statDeltas: {}, moraleDelta: 2 },
+      { id: 'skip_home', text: 'You stay focused, you’ll make up for it later', statDeltas: { serious: 1 }, moraleDelta: -3 },
+    ],
+  },
+  {
+    id: 'contract_leak',
+    text: '📰 Details of your contract leak to the esports press.',
+    options: [
+      { id: 'clarify_press', text: 'You publish a calm clarification', alias: 'sangfroid', risk: 'safe', relevantStat: 'mental', statDeltas: { mental: 1 }, popularityDelta: 1 },
+      { id: 'ignore_leak2', text: 'You ignore it and let people talk', statDeltas: {} },
+      { id: 'angry_response', text: 'You react strongly in public', alias: 'risque', risk: 'risky', relevantStat: 'mental', statDeltas: { mental: -2 }, popularityDelta: -3, moraleDelta: -2 },
+    ],
+  },
+  {
+    id: 'off_season_camp',
+    text: '🏕️ The off-season offers a choice: intensive bootcamp or real vacation.',
+    options: [
+      { id: 'bootcamp', text: 'You go straight into an intensive bootcamp', statDeltas: { micro: 3, macro: 2, mental: -2 }, formDelta: -4 },
+      { id: 'balance_vacation', text: 'You take a few days then train', statDeltas: { mental: 1 }, formDelta: 2 },
+      { id: 'full_vacation', text: 'You disconnect completely', statDeltas: { mental: 3, micro: -3 }, formDelta: 6, moraleDelta: 4 },
+    ],
+  },
+  {
+    id: 'rumor_transfer',
+    text: '📱 A transfer rumor about you is circulating, with nothing official.',
+    options: [
+      { id: 'stay_focused_rumor', text: 'You stay focused, you’ll deal with the rest later', alias: 'sangfroid', risk: 'medium', relevantStat: 'mental', statDeltas: { mental: 2 } },
+      { id: 'feed_rumor', text: 'You let the ambiguity linger a bit, it drives buzz', alias: 'showman', risk: 'risky', relevantStat: 'locker', statDeltas: {}, popularityDelta: 4, moraleDelta: -1 },
+      { id: 'deny_rumor', text: 'You firmly deny the rumor', statDeltas: { serious: 1 }, popularityDelta: -1 },
     ],
   },
 ];

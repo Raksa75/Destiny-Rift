@@ -18,28 +18,20 @@ export function NameStep({ value, onNext, onBack, step, totalSteps }: Props) {
   return (
     <WizardShell title={t('creation.name.title')} hint={t('creation.name.hint')} onBack={onBack} step={step} totalSteps={totalSteps}>
       <div className="flex flex-col gap-6">
-        <div className="flex gap-2">
-          <input
-            autoFocus
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder={t('creation.name.placeholder')}
-            maxLength={20}
-            className="flex-1 min-w-0 rounded-lg bg-rift-panel-2 border border-rift-border px-3 py-3 text-lg text-rift-text-bright outline-none focus:border-rift-blue transition-colors"
-          />
+        <div className="flex items-center gap-3 rounded-lg bg-rift-panel-2 border border-rift-border px-4 py-4">
+          <span className="flex-1 text-xl font-semibold text-rift-text-bright">{name}</span>
           <button
             type="button"
             onClick={() => setName(generateRandomName())}
             title={t('creation.name.random')}
-            className="shrink-0 rounded-lg border border-rift-border bg-rift-panel-2 hover:border-rift-blue px-4 text-xl transition-colors"
+            className="shrink-0 rounded-lg border border-rift-border bg-rift-panel hover:border-rift-blue px-4 py-2 text-xl transition-colors"
           >
             🎲
           </button>
         </div>
         <button
-          disabled={name.trim().length === 0}
-          onClick={() => onNext(name.trim())}
-          className="rounded-lg bg-rift-blue hover:bg-rift-blue-dark disabled:opacity-40 disabled:cursor-not-allowed text-rift-bg font-semibold py-3 transition-colors"
+          onClick={() => onNext(name)}
+          className="rounded-lg bg-rift-blue hover:bg-rift-blue-dark text-rift-bg font-semibold py-3 transition-colors"
         >
           {t('common.next')}
         </button>

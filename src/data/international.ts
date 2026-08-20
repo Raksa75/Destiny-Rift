@@ -1,5 +1,6 @@
 import { overallRating } from './creation';
 import { CLUB_NAME_POOL } from './clubs';
+import { TEAM_STRENGTH, realTeamNames } from './teamStrength';
 import type { ClubTier, PlayerStats, SeasonPlacement } from '../types';
 
 export type InternationalEventId = 'FIRST_STAND' | 'MSI' | 'WORLDS';
@@ -36,10 +37,21 @@ const OPPONENT_STAR_RANGE: Record<InternationalRound, [number, number]> = {
   FINAL: [3.5, 5],
 };
 
+// Prefer a real organization whose roleplay strength fits the round (tougher as the
+// bracket advances), so the international stage feels like the real scene. Falls back
+// to a fictional name with a randomized rating once the round-appropriate real teams
+// (or all real teams) are exhausted.
 export function generateOpponent(round: InternationalRound, excludeNames: string[]): { name: string; stars: number } {
-  const pool = CLUB_NAME_POOL.filter((n) => !excludeNames.includes(n));
-  const name = pool[Math.floor(Math.random() * pool.length)] ?? 'Unknown Rival';
   const [lo, hi] = OPPONENT_STAR_RANGE[round];
+  const realCandidates = realTeamNames().filter(
+    (n) => !excludeNames.includes(n) && TEAM_STRENGTH[n] >= lo - 0.5 && TEAM_STRENGTH[n] <= hi + 0.5,
+  );
+  if (realCandidates.length > 0) {
+    const name = realCandidates[Math.floor(Math.random() * realCandidates.length)];
+    return { name, stars: clampStars(TEAM_STRENGTH[name]) };
+  }
+  const fictionalPool = CLUB_NAME_POOL.filter((n) => !excludeNames.includes(n));
+  const name = fictionalPool[Math.floor(Math.random() * fictionalPool.length)] ?? 'Unknown Rival';
   const stars = clampStars(lo + Math.random() * (hi - lo));
   return { name, stars };
 }

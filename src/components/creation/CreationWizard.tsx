@@ -189,6 +189,8 @@ export function CreationWizard({ onCancel, onComplete, onDone }: Props) {
             retirementReason: null,
             titles: [],
             awards: [],
+            traits: [],
+            ratingHistory: [],
             turnCount: 0,
             seasonsPlayed: 0,
             seasonWins: 0,
