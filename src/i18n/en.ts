@@ -18,6 +18,7 @@ const en: Dict = {
   'common.next': 'Next',
   'common.confirm': 'Confirm',
   'common.menu': 'Main menu',
+  'common.randomize': 'Randomize all',
 
   'players.title': 'My Players',
   'players.empty': 'No career yet. Get started!',
@@ -98,9 +99,6 @@ const en: Dict = {
   'creation.club.statsReveal': 'Your starting stats',
   'creation.club.pick': 'Sign here',
 
-  'creation.done.title': 'Career launched!',
-  'creation.done.text': '{name} joins {club} as {role}. Good luck on the Rift.',
-  'creation.done.play': 'Start the career',
   'creation.done.viewPlayers': 'View my players',
   'creation.done.menu': 'Back to home',
 
@@ -252,6 +250,10 @@ const en: Dict = {
   'month.10': 'October',
   'month.11': 'November',
   'month.12': 'December',
+
+  'risk.safe': 'Safe',
+  'risk.medium': 'Moderate',
+  'risk.risky': 'Risky',
 
   'alias.leader': 'Leader',
   'alias.sangfroid': 'Ice-cold',

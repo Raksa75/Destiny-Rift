@@ -1,7 +1,9 @@
+@import url("https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&display=swap");
 @import "tailwindcss";
 
 @theme {
   --font-sans: "Inter", system-ui, "Segoe UI", Roboto, sans-serif;
+  --font-display: "Baloo 2", "Inter", system-ui, sans-serif;
   --color-rift-bg: #142b18;
   --color-rift-panel: #ffffff;
   --color-rift-panel-2: #f2f4f0;

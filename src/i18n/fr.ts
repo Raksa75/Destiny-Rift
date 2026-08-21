@@ -16,6 +16,7 @@ const fr = {
   'common.next': 'Suivant',
   'common.confirm': 'Confirmer',
   'common.menu': 'Menu principal',
+  'common.randomize': 'Tout aléatoire',
 
   'players.title': 'Mes Joueurs',
   'players.empty': "Aucune carrière pour l'instant. Lance-toi !",
@@ -96,9 +97,6 @@ const fr = {
   'creation.club.statsReveal': 'Tes statistiques de départ',
   'creation.club.pick': 'Signer ici',
 
-  'creation.done.title': 'Carrière lancée !',
-  'creation.done.text': '{name} rejoint {club} en tant que {role}. Bonne chance sur la Faille.',
-  'creation.done.play': 'Commencer la carrière',
   'creation.done.viewPlayers': 'Voir mes joueurs',
   'creation.done.menu': "Retour à l'accueil",
 
@@ -251,6 +249,10 @@ const fr = {
   'month.10': 'Octobre',
   'month.11': 'Novembre',
   'month.12': 'Décembre',
+
+  'risk.safe': 'Sûr',
+  'risk.medium': 'Modéré',
+  'risk.risky': 'Risqué',
 
   'alias.leader': 'Leader',
   'alias.sangfroid': 'Sang-froid',

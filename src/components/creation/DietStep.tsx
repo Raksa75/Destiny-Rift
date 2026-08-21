@@ -12,11 +12,20 @@ interface Props {
 
 const STAT_KEYS: StatKey[] = ['micro', 'macro', 'teamfight', 'lane', 'mental', 'serious', 'coach', 'locker'];
 
+const DIET_EMOJI: Record<DietId, string> = { BAD: '🍔', MID: '🍽️', GOOD: '🥗' };
+
 export function DietStep({ onNext, onBack, step, totalSteps }: Props) {
   const { t } = useI18n();
 
   return (
-    <WizardShell title={t('creation.diet.title')} hint={t('creation.diet.hint')} onBack={onBack} step={step} totalSteps={totalSteps}>
+    <WizardShell
+      title={t('creation.diet.title')}
+      hint={t('creation.diet.hint')}
+      onBack={onBack}
+      onRandomize={() => onNext(DIET_IDS[Math.floor(Math.random() * DIET_IDS.length)])}
+      step={step}
+      totalSteps={totalSteps}
+    >
       <div className="flex flex-col gap-3">
         {DIET_IDS.map((diet) => {
           const mods = DIET_STAT_MODS[diet];
@@ -27,7 +36,9 @@ export function DietStep({ onNext, onBack, step, totalSteps }: Props) {
               onClick={() => onNext(diet)}
               className="text-left rounded-lg border border-rift-border bg-rift-panel-2 hover:border-rift-blue px-4 py-4 transition-colors"
             >
-              <div className="font-medium text-rift-text-bright">{t(`diet.${diet}` as never)}</div>
+              <div className="font-medium text-rift-text-bright">
+                {DIET_EMOJI[diet]} {t(`diet.${diet}` as never)}
+              </div>
               <div className="text-sm text-rift-text mt-1">{t(`diet.${diet}.desc` as never)}</div>
               {entries.length > 0 && (
                 <div className="flex flex-wrap gap-1.5 mt-2">

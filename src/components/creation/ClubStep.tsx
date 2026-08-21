@@ -35,6 +35,7 @@ export function ClubStep({ stats, potential, popularity, offers, region, onNext,
       title={t('creation.club.title')}
       hint={t('creation.club.hint', { league })}
       onBack={onBack}
+      onRandomize={() => onNext(offers[Math.floor(Math.random() * offers.length)])}
       step={step}
       totalSteps={totalSteps}
     >

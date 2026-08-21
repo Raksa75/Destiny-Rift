@@ -12,11 +12,20 @@ interface Props {
 
 const STAT_KEYS: StatKey[] = ['micro', 'macro', 'teamfight', 'lane', 'mental', 'serious', 'coach', 'locker'];
 
+const TALENT_EMOJI: Record<TalentId, string> = { UNKNOWN: '❓', STAR_KID: '🌟', LATE_BLOOMER: '🌱', ACADEMY: '🏫' };
+
 export function TalentStep({ onNext, onBack, step, totalSteps }: Props) {
   const { t } = useI18n();
 
   return (
-    <WizardShell title={t('creation.talent.title')} hint={t('creation.talent.hint')} onBack={onBack} step={step} totalSteps={totalSteps}>
+    <WizardShell
+      title={t('creation.talent.title')}
+      hint={t('creation.talent.hint')}
+      onBack={onBack}
+      onRandomize={() => onNext(TALENT_IDS[Math.floor(Math.random() * TALENT_IDS.length)])}
+      step={step}
+      totalSteps={totalSteps}
+    >
       <div className="flex flex-col gap-3">
         {TALENT_IDS.map((talent) => {
           const mods = TALENT_STAT_MODS[talent];
@@ -29,7 +38,9 @@ export function TalentStep({ onNext, onBack, step, totalSteps }: Props) {
               onClick={() => onNext(talent)}
               className="text-left rounded-lg border border-rift-border bg-rift-panel-2 hover:border-rift-blue px-4 py-4 transition-colors"
             >
-              <div className="font-medium text-rift-text-bright">{t(`talent.${talent}` as never)}</div>
+              <div className="font-medium text-rift-text-bright">
+                {TALENT_EMOJI[talent]} {t(`talent.${talent}` as never)}
+              </div>
               <div className="text-sm text-rift-text mt-1">{t(`talent.${talent}.desc` as never)}</div>
               {(entries.length > 0 || popularityMod !== 0 || potentialMod !== 0) && (
                 <div className="flex flex-wrap gap-1.5 mt-2">

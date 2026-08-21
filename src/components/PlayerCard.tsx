@@ -21,7 +21,7 @@ export function PlayerCard({ career }: { career: CareerRecord }) {
       <div className="flex items-start gap-4">
         <Avatar name={career.name} />
         <div className="flex-1 min-w-0">
-          <h1 className="text-xl font-semibold text-rift-text-bright truncate">{career.name}</h1>
+          <h1 className="font-display text-xl font-bold text-rift-text-bright truncate">{career.name}</h1>
           <p className="text-sm text-rift-text mt-0.5">
             {career.country} · {t('play.ageYears', { age: String(career.age) })}
           </p>

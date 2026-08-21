@@ -12,7 +12,7 @@ export function MainMenu({ onNavigate }: Props) {
       <div className="w-full max-w-md flex flex-col items-center gap-10">
         <div className="text-center">
           <p className="text-rift-blue text-xs tracking-[0.3em] uppercase mb-2">Destiny: Summoner</p>
-          <h1 className="text-3xl font-semibold text-rift-gold-bright">{t('menu.tagline')}</h1>
+          <h1 className="font-display text-3xl font-bold text-rift-gold-bright">{t('menu.tagline')}</h1>
         </div>
 
         <nav className="w-full flex flex-col gap-3">

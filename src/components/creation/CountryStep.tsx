@@ -17,6 +17,11 @@ export function CountryStep({ onNext, onBack, step, totalSteps }: Props) {
       title={t('creation.country.title')}
       hint={t('creation.country.hint')}
       onBack={onBack}
+      onRandomize={() => {
+        const region = REGIONS[Math.floor(Math.random() * REGIONS.length)];
+        const country = region.countries[Math.floor(Math.random() * region.countries.length)];
+        onNext(country);
+      }}
       step={step}
       totalSteps={totalSteps}
     >

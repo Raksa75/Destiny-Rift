@@ -8,6 +8,7 @@ import { computeSeasonPlacement, padSeasonRecord } from '../data/season';
 import { growthMultiplier, naturalDecay } from '../data/aging';
 import { isAbroad, moraleDrain, monthlyDecay as homesicknessDecay } from '../data/homesickness';
 import { computeSuccessChance, outcomeNarrativeKey, resolveOutcome } from '../data/outcomes';
+import type { RiskLevel } from '../data/outcomes';
 import { rollTraitUnlock, applyTraitBuff } from '../data/traits';
 import type { QuestionOption } from '../data/questionTypes';
 import type { MatchOption, MatchQuestion } from '../data/matchTypes';
@@ -27,6 +28,14 @@ interface Props {
 
 const STAT_KEYS: StatKey[] = ['micro', 'macro', 'teamfight', 'lane', 'mental', 'serious', 'coach', 'locker'];
 const MONTH_KEYS = Array.from({ length: 12 }, (_, i) => `month.${i + 1}`);
+const RISK_BADGE_CLASS: Record<RiskLevel, string> = {
+  safe: 'text-rift-green bg-rift-green/10',
+  medium: 'text-rift-blue bg-rift-blue/10',
+  risky: 'text-rift-red bg-rift-red/10',
+};
+// A little passive recovery every month — form shouldn't just monotonically bleed out
+// between the explicit drains of training, matches, and rough choices.
+const FORM_REGEN = 4;
 
 function clamp(n: number, lo = 0, hi = 100) {
   return Math.max(lo, Math.min(hi, n));
@@ -112,7 +121,7 @@ export function PlayScreen({ career, onUpdate, onBack }: Props) {
     const money = career.money + moneyGain;
     const careerEarnings = career.careerEarnings + Math.max(0, moneyGain);
     const popularity = clamp(career.popularity + params.popularityDelta);
-    const form = clamp(career.form + params.formDelta);
+    const form = clamp(career.form + params.formDelta + FORM_REGEN);
     const morale = clamp(career.morale + params.moraleDelta - drain);
     const peakOverall = Math.max(career.peakOverall, Math.round(overallRating(stats)));
 
@@ -172,7 +181,7 @@ export function PlayScreen({ career, onUpdate, onBack }: Props) {
       ...statDeltaItems,
       ...(moneyDeltaTotal !== 0 ? [{ label: '€', value: moneyDeltaTotal }] : []),
       ...(params.popularityDelta !== 0 ? [{ label: t('card.reputation'), value: params.popularityDelta }] : []),
-      ...(params.formDelta !== 0 ? [{ label: t('card.form'), value: params.formDelta }] : []),
+      ...(form - career.form !== 0 ? [{ label: t('card.form'), value: form - career.form }] : []),
       ...(morale - career.morale !== 0 ? [{ label: t('card.morale'), value: morale - career.morale }] : []),
     ];
 
@@ -368,22 +377,26 @@ export function PlayScreen({ career, onUpdate, onBack }: Props) {
         <section className="rounded-2xl border border-rift-blue/40 bg-rift-panel/80 p-5 animate-[fadeIn_0.2s_ease-out]">
           <p className="text-rift-text-bright font-medium mb-4">💬 {question.text}</p>
           <div className="flex flex-col gap-2.5">
-            {question.options.map((option) => (
-              <button
-                key={option.id}
-                onClick={() => handleQuestionAnswer(option)}
-                className="text-left rounded-lg border border-rift-border bg-rift-panel-2 hover:border-rift-blue active:scale-[0.99] px-4 py-3 text-sm text-rift-text-bright transition-all"
-              >
-                <span className="flex items-center gap-2 flex-wrap">
-                  {option.alias && (
-                    <span className="shrink-0 text-[10px] uppercase tracking-wide font-semibold text-rift-blue bg-rift-blue/10 rounded-full px-2 py-0.5">
-                      {t(`alias.${option.alias}` as never)}
+            {question.options.map((option) => {
+              const risk = option.risk ?? 'medium';
+              const badgeLabel = option.alias ? t(`alias.${option.alias}` as never) : t(`risk.${risk}` as never);
+              return (
+                <button
+                  key={option.id}
+                  onClick={() => handleQuestionAnswer(option)}
+                  className="text-left rounded-lg border border-rift-border bg-rift-panel-2 hover:border-rift-blue active:scale-[0.99] px-4 py-3 text-sm text-rift-text-bright transition-all"
+                >
+                  <span className="flex items-center gap-2 flex-wrap">
+                    <span
+                      className={`shrink-0 text-[10px] uppercase tracking-wide font-semibold rounded-full px-2 py-0.5 ${RISK_BADGE_CLASS[risk]}`}
+                    >
+                      {badgeLabel}
                     </span>
-                  )}
-                  {option.text}
-                </span>
-              </button>
-            ))}
+                    {option.text}
+                  </span>
+                </button>
+              );
+            })}
           </div>
         </section>
       )}

@@ -11,9 +11,8 @@ import { RoleStep } from './RoleStep';
 import { DietStep } from './DietStep';
 import { TalentStep } from './TalentStep';
 import { ClubStep } from './ClubStep';
-import { DoneStep } from './DoneStep';
 
-type Step = 'country' | 'role' | 'diet' | 'talent' | 'club' | 'done';
+type Step = 'country' | 'role' | 'diet' | 'talent' | 'club';
 const STEP_ORDER: Step[] = ['country', 'role', 'diet', 'talent', 'club'];
 
 interface WizardData {
@@ -47,7 +46,6 @@ export function CreationWizard({ onCancel, onComplete, onDone }: Props) {
     talent: null,
   });
   const [clubStage, setClubStage] = useState<ClubStageData | null>(null);
-  const [record, setRecord] = useState<CareerRecord | null>(null);
 
   const stepIndex = STEP_ORDER.indexOf(step);
 
@@ -183,24 +181,12 @@ export function CreationWizard({ onCancel, onComplete, onDone }: Props) {
             log: [],
             createdAt: new Date().toISOString(),
           };
-          setRecord(newRecord);
           onComplete(newRecord);
-          setStep('done');
+          onDone('play');
         }}
         onBack={goBack}
         step={stepIndex}
         totalSteps={STEP_ORDER.length}
-      />
-    );
-  }
-
-  if (step === 'done' && record) {
-    return (
-      <DoneStep
-        record={record}
-        onPlay={() => onDone('play')}
-        onViewPlayers={() => onDone('players')}
-        onMenu={() => onDone('menu')}
       />
     );
   }
