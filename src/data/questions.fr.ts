@@ -13,6 +13,7 @@ const questions: Question[] = [
   {
     id: 'amateur_tournament',
     text: 'Un tournoi amateur est organisé près de chez toi.',
+    maxAge: 19,
     options: [
       { id: 'play', text: "Tu t'inscris et tu te donnes à fond", statDeltas: { teamfight: 3, mental: -1 }, popularityDelta: 3, formDelta: -5, moraleDelta: 3 },
       { id: 'watch', text: 'Tu regardes en spectateur pour apprendre', statDeltas: { macro: 2 }, moraleDelta: 1 },
@@ -31,6 +32,7 @@ const questions: Question[] = [
   {
     id: 'parents_worried',
     text: "Tes parents s'inquiètent du temps que tu passes devant l'écran.",
+    maxAge: 19,
     options: [
       { id: 'explain', text: 'Tu leur expliques ton projet sérieusement', statDeltas: { serious: 3, mental: 2 }, moraleDelta: 3 },
       { id: 'shrug', text: 'Tu hausses les épaules et continues', statDeltas: {} },
@@ -49,6 +51,7 @@ const questions: Question[] = [
   {
     id: 'school_or_esport',
     text: "Il faut trancher entre l'école et l'esport pour cette année.",
+    maxAge: 18,
     options: [
       { id: 'allin', text: "Tu mises tout sur l'esport", alias: 'risque', risk: 'risky', relevantStat: 'mental', statDeltas: { teamfight: 3, serious: -2 }, formDelta: -6, moraleDelta: -2 },
       { id: 'balance', text: 'Tu gardes un équilibre entre les deux', statDeltas: { serious: 2 }, formDelta: -1, moraleDelta: 1 },
@@ -400,6 +403,7 @@ const questions: Question[] = [
   {
     id: 'academy_call',
     text: '🎓 Le club te propose d’encadrer un jeune de l’équipe académique.',
+    minAge: 23,
     options: [
       { id: 'mentor', text: 'Tu prends le temps de le former sérieusement', alias: 'leader', risk: 'safe', relevantStat: 'locker', statDeltas: { locker: 4, coach: 2 }, formDelta: -1 },
       { id: 'light_mentor', text: 'Tu donnes quelques conseils rapides', statDeltas: { locker: 1 } },
@@ -440,6 +444,236 @@ const questions: Question[] = [
       { id: 'stay_focused_rumor', text: 'Tu restes focus, tu géreras le reste après', alias: 'sangfroid', risk: 'medium', relevantStat: 'mental', statDeltas: { mental: 2 } },
       { id: 'feed_rumor', text: 'Tu entretiens un peu le flou, ça fait le buzz', alias: 'showman', risk: 'risky', relevantStat: 'locker', statDeltas: {}, popularityDelta: 4, moraleDelta: -1 },
       { id: 'deny_rumor', text: 'Tu démens fermement la rumeur', statDeltas: { serious: 1 }, popularityDelta: -1 },
+    ],
+  },
+  {
+    id: 'top_island',
+    text: '🏝️ Isolé en toplane, tu te sens coupé du reste de la carte pendant les teamfights.',
+    roles: ['TOP'],
+    options: [
+      { id: 'embrace', text: 'Tu acceptes l’isolement et joues pour le split push', alias: 'risque', risk: 'risky', relevantStat: 'lane', statDeltas: { lane: 4, teamfight: -2 } },
+      { id: 'ask_help', text: 'Tu demandes à ton jungler de venir plus souvent', statDeltas: { coach: 2, teamfight: 1 } },
+      { id: 'roam_top', text: 'Tu forces des roams toi-même pour peser ailleurs', statDeltas: { macro: 2, lane: -2 }, formDelta: -2 },
+    ],
+  },
+  {
+    id: 'top_matchup',
+    text: '🛡️ Un matchup toplane très défavorable t’attend en draft.',
+    roles: ['TOP'],
+    options: [
+      { id: 'farm_safe', text: 'Tu joues ultra safe et attends le scaling', risk: 'safe', relevantStat: 'lane', statDeltas: { lane: 2, mental: 1 } },
+      { id: 'trade_risky', text: 'Tu cherches quand même des trades risqués', alias: 'risque', risk: 'risky', relevantStat: 'micro', statDeltas: { micro: 3 }, formDelta: -2 },
+      { id: 'ask_swap', text: 'Tu demandes un swap de lane à l’équipe', statDeltas: { locker: -1, teamfight: 1 } },
+    ],
+  },
+  {
+    id: 'jungle_pathing',
+    text: '🌲 Un coéquipier remet en question tes choix de pathing en jungle.',
+    roles: ['JUNGLE'],
+    options: [
+      { id: 'explain_path', text: 'Tu expliques calmement ta logique', alias: 'sangfroid', risk: 'safe', relevantStat: 'macro', statDeltas: { macro: 3, locker: 1 } },
+      { id: 'adjust_path', text: 'Tu ajustes ton pathing à ses attentes', statDeltas: { macro: 1, locker: 2 } },
+      { id: 'ignore_crit', text: 'Tu ignores et continues comme avant', statDeltas: { macro: -1, locker: -2 }, moraleDelta: -1 },
+    ],
+  },
+  {
+    id: 'jungle_camp_dispute',
+    text: '⚔️ Une jungle rivale vient scale tes propres camps en early game.',
+    roles: ['JUNGLE'],
+    options: [
+      { id: 'contest', text: 'Tu contestes et engages un duel risqué', alias: 'risque', risk: 'risky', relevantStat: 'micro', statDeltas: { micro: 3, teamfight: 1 } },
+      { id: 'reroute', text: 'Tu changes ta route sans t’accrocher', risk: 'safe', relevantStat: 'macro', statDeltas: { macro: 2 } },
+      { id: 'call_gank', text: 'Tu appelles un gank pour la punir ailleurs', statDeltas: { teamfight: 2, macro: 1 }, formDelta: -1 },
+    ],
+  },
+  {
+    id: 'mid_roam_pressure',
+    text: '🎯 Ton équipe attend de toi que tu roam constamment pour aider les autres lanes.',
+    roles: ['MID'],
+    options: [
+      { id: 'roam_often', text: 'Tu roames à chaque occasion', alias: 'risque', risk: 'risky', relevantStat: 'macro', statDeltas: { macro: 3, lane: -2 } },
+      { id: 'balance_roam', text: 'Tu roames seulement sur les opportunités sûres', risk: 'safe', relevantStat: 'macro', statDeltas: { macro: 2, lane: 1 } },
+      { id: 'stay_lane', text: 'Tu restes concentré sur ta lane', statDeltas: { lane: 3, macro: -1 }, moraleDelta: -1 },
+    ],
+  },
+  {
+    id: 'mid_lane_bully',
+    text: '😤 Ton adversaire en mid te bully violemment dès le niveau 3.',
+    roles: ['MID'],
+    options: [
+      { id: 'trade_back', text: 'Tu trades chaque fois que possible', alias: 'risque', risk: 'risky', relevantStat: 'micro', statDeltas: { micro: 3 }, formDelta: -2 },
+      { id: 'freeze', text: 'Tu freezes la lane pour limiter les risques', risk: 'safe', relevantStat: 'lane', statDeltas: { lane: 3, mental: 1 } },
+      { id: 'roam_away', text: 'Tu abandonnes la lane et pars roam', statDeltas: { macro: 2, lane: -2 } },
+    ],
+  },
+  {
+    id: 'adc_positioning',
+    text: '🏹 Le coach critique ton positionnement en teamfight cette semaine.',
+    roles: ['ADC'],
+    options: [
+      { id: 'study_positioning', text: 'Tu retravailles ton positionnement sérieusement', risk: 'safe', relevantStat: 'teamfight', statDeltas: { teamfight: 3, coach: 2 }, formDelta: -2 },
+      { id: 'defend_style', text: 'Tu défends ton style de jeu', alias: 'sangfroid', risk: 'medium', relevantStat: 'mental', statDeltas: { mental: 1, coach: -2 } },
+      { id: 'shrug_crit', text: 'Tu hausses les épaules, ça viendra avec le temps', statDeltas: {}, moraleDelta: -1 },
+    ],
+  },
+  {
+    id: 'adc_peel',
+    text: '🛡️ Tu sens que ton support ne te peel pas assez en teamfight.',
+    roles: ['ADC'],
+    options: [
+      { id: 'talk_support', text: 'Tu en discutes calmement avec ton support', alias: 'leader', risk: 'safe', relevantStat: 'locker', statDeltas: { locker: 3, teamfight: 1 } },
+      { id: 'adapt_position', text: 'Tu adaptes seul ton positionnement', statDeltas: { teamfight: 2, micro: 1 } },
+      { id: 'blame_support', text: 'Tu blâmes ouvertement ton support', alias: 'risque', risk: 'risky', relevantStat: 'mental', statDeltas: { mental: -1, locker: -4 }, moraleDelta: -2 },
+    ],
+  },
+  {
+    id: 'support_vision',
+    text: '👁️ Ton score de vision est pointé du doigt après la défaite.',
+    roles: ['SUPPORT'],
+    options: [
+      { id: 'buy_more_wards', text: 'Tu investis encore plus dans les wards', risk: 'safe', relevantStat: 'macro', statDeltas: { macro: 3 }, moneyDelta: -20 },
+      { id: 'defend_vision', text: 'Tu expliques que la vision seule ne gagne pas les games', alias: 'sangfroid', risk: 'medium', relevantStat: 'mental', statDeltas: { mental: 1, macro: 1 } },
+      { id: 'ignore_vision_crit', text: 'Tu ignores la critique', statDeltas: {}, moraleDelta: -1 },
+    ],
+  },
+  {
+    id: 'support_engage',
+    text: '💥 Un engage que tu as initié a mal tourné, l’équipe te blâme.',
+    roles: ['SUPPORT'],
+    options: [
+      { id: 'own_mistake', text: 'Tu assumes l’erreur devant le groupe', alias: 'leader', risk: 'medium', relevantStat: 'locker', statDeltas: { locker: 3, mental: 1 }, moraleDelta: 1 },
+      { id: 'explain_call', text: 'Tu expliques ta lecture du moment', risk: 'safe', relevantStat: 'macro', statDeltas: { macro: 2 } },
+      { id: 'deflect_blame', text: 'Tu rejettes la faute sur les autres', alias: 'risque', risk: 'risky', relevantStat: 'mental', statDeltas: { mental: -1, locker: -4 }, popularityDelta: -1 },
+    ],
+  },
+  {
+    id: 'veteran_advice',
+    text: '👴 Un jeune coéquipier te demande des conseils sur la gestion de carrière.',
+    minAge: 26,
+    options: [
+      { id: 'mentor_generous', text: 'Tu prends le temps de vraiment l’aider', alias: 'leader', risk: 'safe', relevantStat: 'locker', statDeltas: { locker: 4, coach: 2 } },
+      { id: 'brief_tips', text: 'Tu donnes quelques conseils rapides', statDeltas: { locker: 1 } },
+      { id: 'brush_off', text: 'Tu élude, pas le temps pour ça', statDeltas: { locker: -2 } },
+    ],
+  },
+  {
+    id: 'retirement_thoughts',
+    text: '🤔 L’idée de l’après-carrière commence à te traverser l’esprit.',
+    minAge: 28,
+    options: [
+      { id: 'start_planning', text: 'Tu commences à préparer sérieusement la suite', statDeltas: { serious: 3 } },
+      { id: 'push_away', text: 'Tu repousses cette pensée pour l’instant', statDeltas: { mental: -2 }, moraleDelta: -1 },
+      { id: 'talk_to_club', text: 'Tu en parles avec le club pour un rôle futur', statDeltas: { coach: 3 }, moraleDelta: 1 },
+    ],
+  },
+  {
+    id: 'new_meta_shift',
+    text: '🔄 Un nouveau patch bouleverse totalement la méta actuelle.',
+    options: [
+      { id: 'theorycraft_meta', text: 'Tu passes des heures à théorycrafter', statDeltas: { macro: 3, mental: -1 }, formDelta: -3 },
+      { id: 'adapt_gradually', text: 'Tu t’adaptes progressivement', statDeltas: { lane: 2, coach: 2 } },
+      { id: 'comfort_picks', text: 'Tu t’accroches à tes picks de confort', alias: 'risque', risk: 'risky', relevantStat: 'mental', statDeltas: { mental: 1, macro: -2 } },
+    ],
+  },
+  {
+    id: 'roster_captain',
+    text: '🎖️ Le coach te propose le brassard de capitaine de l’équipe.',
+    minAge: 22,
+    options: [
+      { id: 'accept_captain', text: 'Tu acceptes à fond', alias: 'leader', risk: 'medium', relevantStat: 'locker', statDeltas: { locker: 5, teamfight: 2 }, formDelta: -1 },
+      { id: 'accept_reluctant', text: 'Tu acceptes, sans grande conviction', statDeltas: { locker: 2 } },
+      { id: 'decline_captain', text: 'Tu déclines, pas prêt pour cette responsabilité', statDeltas: { mental: 1 }, moraleDelta: -1 },
+    ],
+  },
+  {
+    id: 'online_hate',
+    text: '💢 Une vague de messages haineux déferle sur tes réseaux après une défaite.',
+    options: [
+      { id: 'mute_disconnect', text: 'Tu coupes les réseaux et déconnectes', risk: 'safe', relevantStat: 'mental', statDeltas: { mental: 2 }, moraleDelta: 2 },
+      { id: 'respond_calm', text: 'Tu réponds avec calme et recul', alias: 'sangfroid', risk: 'medium', relevantStat: 'mental', statDeltas: { mental: 2 }, popularityDelta: 1 },
+      { id: 'engage_trolls', text: 'Tu réponds aux trolls un par un', alias: 'risque', risk: 'risky', relevantStat: 'mental', statDeltas: { mental: -2 }, moraleDelta: -3 },
+    ],
+  },
+  {
+    id: 'training_facility',
+    text: '🏋️ Le club investit dans une nouvelle salle d’entraînement physique.',
+    options: [
+      { id: 'use_seriously', text: 'Tu l’utilises sérieusement chaque semaine', statDeltas: { serious: 2 }, formDelta: 4 },
+      { id: 'use_occasionally', text: 'Tu y passes de temps en temps', statDeltas: { serious: 1 }, formDelta: 1 },
+      { id: 'ignore_facility', text: 'Tu l’ignores complètement', statDeltas: {}, formDelta: -2 },
+    ],
+  },
+  {
+    id: 'scrim_partner_drama',
+    text: '🥊 Une équipe partenaire de scrims triche pendant les sessions (picks cachés, etc).',
+    options: [
+      { id: 'confront_cheat', text: 'Tu les confrontes directement', alias: 'risque', risk: 'risky', relevantStat: 'mental', statDeltas: { mental: 1 }, popularityDelta: 1 },
+      { id: 'report_management', text: 'Tu signales ça à ton management', risk: 'safe', relevantStat: 'serious', statDeltas: { serious: 2 } },
+      { id: 'ignore_cheat', text: 'Tu laisses couler et passes à autre chose', statDeltas: {}, moraleDelta: -1 },
+    ],
+  },
+  {
+    id: 'fan_art',
+    text: '🎨 Un fan t’envoie un fan art incroyable à ton effigie.',
+    options: [
+      { id: 'share_fanart', text: 'Tu le partages fièrement sur tes réseaux', statDeltas: {}, popularityDelta: 4, moraleDelta: 2 },
+      { id: 'thank_privately', text: 'Tu remercies discrètement en message privé', statDeltas: {}, moraleDelta: 2 },
+      { id: 'ignore_fanart', text: 'Tu ne réagis pas, débordé·e', statDeltas: {}, popularityDelta: -1 },
+    ],
+  },
+  {
+    id: 'nutrition_slip',
+    text: '🍕 Après une bonne série de victoires, tu relâches un peu ton hygiène de vie.',
+    options: [
+      { id: 'catch_yourself', text: 'Tu te reprends vite en main', statDeltas: { serious: 1 }, formDelta: 1 },
+      { id: 'let_it_slide', text: 'Tu laisses filer un peu, tu le mérites bien', statDeltas: {}, moraleDelta: 2, formDelta: -2 },
+      { id: 'full_binge', text: 'Tu craques complètement pendant plusieurs jours', alias: 'risque', risk: 'risky', relevantStat: 'serious', statDeltas: { serious: -2 }, formDelta: -3, moraleDelta: 3 },
+    ],
+  },
+  {
+    id: 'analyst_job_offer',
+    text: '📈 Une chaîne esport te propose un poste d’analyste/consultant à mi-temps.',
+    minAge: 29,
+    options: [
+      { id: 'accept_analyst', text: 'Tu acceptes, ça diversifie tes revenus', statDeltas: { macro: 2 }, moneyDelta: 100, formDelta: -2 },
+      { id: 'decline_analyst', text: 'Tu déclines poliment, focus sur le jeu', statDeltas: { serious: 1 } },
+      { id: 'negotiate_analyst', text: 'Tu négocies pour de meilleures conditions', statDeltas: { serious: 1 }, moneyDelta: 50 },
+    ],
+  },
+  {
+    id: 'home_region_call',
+    text: '🏠 Ta fédération d’origine t’invite à un événement de promotion locale.',
+    options: [
+      { id: 'participate_proud', text: 'Tu participes fièrement en personne', statDeltas: {}, popularityDelta: 5, moneyDelta: -40, moraleDelta: 3 },
+      { id: 'video_message', text: 'Tu envoies un court message vidéo', statDeltas: {}, popularityDelta: 2 },
+      { id: 'decline_home_call', text: 'Tu déclines, trop pris par la saison', statDeltas: { serious: 1 }, popularityDelta: -1 },
+    ],
+  },
+  {
+    id: 'gaming_house_party',
+    text: '🎉 La gaming house organise une soirée jeux entre coéquipiers.',
+    options: [
+      { id: 'join_party', text: 'Tu participes à fond toute la soirée', statDeltas: { locker: 4 }, formDelta: -2, moraleDelta: 3 },
+      { id: 'pop_by', text: 'Tu passes brièvement puis te retires', statDeltas: { locker: 1 }, moraleDelta: 1 },
+      { id: 'skip_train', text: 'Tu passes ton tour pour t’entraîner', statDeltas: { micro: 1, locker: -2 } },
+    ],
+  },
+  {
+    id: 'stat_padding_temptation',
+    text: '📊 Tu pourrais viser des stats individuelles plutôt que jouer pour l’équipe ce match.',
+    options: [
+      { id: 'play_for_team', text: 'Tu joues pour l’équipe, comme toujours', risk: 'safe', relevantStat: 'locker', statDeltas: { locker: 3, teamfight: 1 } },
+      { id: 'balance_stats', text: 'Tu trouves un équilibre entre les deux', statDeltas: { teamfight: 1 } },
+      { id: 'chase_stats', text: 'Tu chasses les stats individuelles', alias: 'risque', risk: 'risky', relevantStat: 'micro', statDeltas: { micro: 3, teamfight: -3 }, popularityDelta: 2, moraleDelta: -2 },
+    ],
+  },
+  {
+    id: 'documentary_crew_follow',
+    text: '🎥 Une équipe de tournage te suit pendant une semaine complète pour un projet.',
+    options: [
+      { id: 'open_up_crew', text: 'Tu t’ouvres complètement à la caméra', alias: 'showman', risk: 'medium', relevantStat: 'locker', statDeltas: {}, moneyDelta: 100, popularityDelta: 6, formDelta: -3 },
+      { id: 'stay_guarded_crew', text: 'Tu restes prudent devant la caméra', statDeltas: {}, moneyDelta: 60, popularityDelta: 2 },
+      { id: 'ask_leave_crew', text: 'Tu demandes à l’équipe de partir', statDeltas: { mental: 1 }, popularityDelta: -2 },
     ],
   },
 ];

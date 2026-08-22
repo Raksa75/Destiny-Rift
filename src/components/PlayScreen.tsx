@@ -67,7 +67,7 @@ interface PendingResult {
 export function PlayScreen({ career, onUpdate, onBack }: Props) {
   const { t, lang } = useI18n();
   const [recentIds, setRecentIds] = useState<string[]>([]);
-  const [question, setQuestion] = useState(() => pickQuestion(lang, []));
+  const [question, setQuestion] = useState(() => pickQuestion(lang, [], career.age, career.role));
   const [turn, setTurn] = useState<Turn>(() => rollTurn(career, lang));
   const [seasonPlacement, setSeasonPlacement] = useState<SeasonPlacement | null>(null);
   const [pending, setPending] = useState<PendingResult | null>(null);
@@ -176,10 +176,13 @@ export function PlayScreen({ career, onUpdate, onBack }: Props) {
 
     extraLines.push(t('play.salary.log', { amount: String(salary), club: career.club.name }));
 
-    const moneyDeltaTotal = moneyGain;
+    // Only the choice's own cost/gain goes in the delta pill — the monthly salary is a
+    // constant, unrelated to the decision, and always spelled out in extraLines above.
+    // Blending the two made a costly personal choice (e.g. paying to host family) look
+    // like a net gain whenever the salary happened to cover it.
     const deltas: DeltaItem[] = [
       ...statDeltaItems,
-      ...(moneyDeltaTotal !== 0 ? [{ label: '€', value: moneyDeltaTotal }] : []),
+      ...(params.moneyDelta !== 0 ? [{ label: '€', value: params.moneyDelta }] : []),
       ...(params.popularityDelta !== 0 ? [{ label: t('card.reputation'), value: params.popularityDelta }] : []),
       ...(form - career.form !== 0 ? [{ label: t('card.form'), value: form - career.form }] : []),
       ...(morale - career.morale !== 0 ? [{ label: t('card.morale'), value: morale - career.morale }] : []),
@@ -234,7 +237,7 @@ export function PlayScreen({ career, onUpdate, onBack }: Props) {
   const handleQuestionAnswer = (option: QuestionOption) => {
     const nextRecentIds = [question.id, ...recentIds].slice(0, 4);
     setRecentIds(nextRecentIds);
-    setQuestion(pickQuestion(lang, nextRecentIds));
+    setQuestion(pickQuestion(lang, nextRecentIds, career.age, career.role));
 
     const risk = option.risk ?? 'medium';
     const relevantStat = option.relevantStat ?? 'mental';

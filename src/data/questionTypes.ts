@@ -1,4 +1,4 @@
-import type { PlayerStats, StatKey } from '../types';
+import type { PlayerStats, Role, StatKey } from '../types';
 import type { RiskLevel } from './outcomes';
 
 export interface QuestionOption {
@@ -18,4 +18,7 @@ export interface Question {
   id: string;
   text: string;
   options: QuestionOption[];
+  minAge?: number; // only shows up once the player is at least this old
+  maxAge?: number; // stops showing up past this age
+  roles?: Role[]; // restricts to these roles; undefined = any role
 }
